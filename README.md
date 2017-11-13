@@ -1,6 +1,6 @@
 # pdfkit-commonmark
 
-This is a pdf renderer for 
+A pdf renderer for 
 [commonmark](https://github.com/commonmark). 
 Or a commonmark renderer for 
 [pdfkit](https://github.com/devongovett/pdfkit). 
@@ -12,6 +12,44 @@ renderer.
 
 The PDF version of the [README](README.pdf) is created using the 
 cli script of pdfkit-commonmark.
+
+## Install
+
+Installation uses the npm package manager. Just type the 
+following command after installing npm.
+
+    npm install --save pdfkit-commonmark
+
+## Known limitations
+
+This renderer does currently support:
+
+- paragraphs
+- headers
+- links
+- strong
+- emph
+- flat lists without formatting
+
+This renderer does currently __not__ support:
+
+- explicit softbreaks
+- explicit linebreaks
+- html
+- image
+- code
+- block quotes
+- tables
+- nested lists
+- lists with formatting
+
+Pull requests are welcome.
+
+## Known issues
+
+For whatever reason, the text color switches to blue on the 
+second page for the REAME.pdf. I assume that's the color from 
+the link highlighting. But why this happens is pretty unclear.
 
 ## Usage
 
@@ -52,26 +90,6 @@ the README.md for code examples.
 As code is currently not supported by this renderer, this
 part of the documentation is pretty empty in the pdf. Check
 the README.md for code examples.
-
-## Known issues
-
-For whatever reason, the text color switches to blue on the 
-second page for the REAME.pdf. I assume that's the color from 
-the link highlighting. But why this happens is pretty unclear.
-
-## Known limitations
-
-This renderer does currently not support:
-
-- explicit softbreaks
-- explicit linebreaks
-- html
-- image
-- code
-- block quotes
-- tables
-
-Pull requests are welcome.
 
 ## Dependencies
 
