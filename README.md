@@ -51,6 +51,8 @@ For whatever reason, the text color switches to blue on the
 second page for the REAME.pdf. I assume that's the color from 
 the link highlighting. But why this happens is pretty unclear.
 
+There are some issues with missing whitespaces on linebreaks. 
+
 ## Usage
 
 ### CLI
@@ -81,7 +83,7 @@ the README.md for code examples.
     // write pdf to some file in the current directory
     doc.pipe(fs.createWriteStream(__dirname + '/test.pdf'));
     
-    // render pased markdown to pdf
+    // render parsed markdown to pdf
     writer.render(doc, parsed);
     
     // end the document
