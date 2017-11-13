@@ -7,12 +7,21 @@
     "directories": {
         "lib": "src/"
     },
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/maiers/pdfkit-commonmark.git"
+    },
+    "publishConfig": {
+        "registry": "https://registry.npmjs.org"
+    },
     "scripts": {
+        "clean": "rm -rf dist/",
         "build": "babel --out-dir dist/ src/",
         "test": "mocha --compilers js:babel-core/register --recursive test/",
         "test:coverage": "nyc --reporter=html --reporter=text npm run test",
         "lint": "eslint src/",
-        "lint:fix": "eslint --fix src/"
+        "lint:fix": "eslint --fix src/",
+        "prepublish": "npm run build"
     },
     "keywords": [
         "markdown",
