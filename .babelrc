@@ -1,0 +1,13 @@
+{
+    "presets": [
+        "airbnb"
+    ],
+    "plugins": [
+        "transform-runtime",
+        "transform-async-functions",
+        "transform-regenerator",
+        "transform-class-properties"
+    ],
+    "env": {
+    }
+}
