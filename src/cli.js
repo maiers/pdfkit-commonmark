@@ -4,7 +4,7 @@ import fs from 'fs';
 import path from 'path';
 import PDFDocument from 'pdfkit';
 import commonmark from 'commonmark';
-import CommonmarkPDFRenderer from '../src/commonmark-renderer';
+import CommonmarkPDFRenderer from './commonmark-pdf-renderer';
 
 // get input file info
 const inputFilePath = process.argv[2];
