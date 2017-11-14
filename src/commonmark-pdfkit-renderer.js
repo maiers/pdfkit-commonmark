@@ -263,6 +263,11 @@ class CommonmarkPDFKitRenderer {
                 heightChange += currentLineHeight * op.moveDown;
             }
 
+            if (op.moveUp) {
+                currentLineHeight = doc._font.lineHeight(currentFontSize, true);
+                heightChange -= currentLineHeight * op.moveUp;
+            }
+
             // change the font
             if (op.font) {
                 const resolvedFont = Font.forInternalName(op.font, this.options);

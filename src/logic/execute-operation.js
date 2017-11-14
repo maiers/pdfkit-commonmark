@@ -17,6 +17,10 @@ export default (operation, doc, options) => {
         doc.moveDown();
     }
 
+    if (operation.moveUp) {
+        doc.moveUp();
+    }
+
     if (operation.save) {
         doc.save();
     }

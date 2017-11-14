@@ -26,21 +26,38 @@ export default (operations, options) => {
         console.log('\nOperations:\n', JSON.stringify(operations, null, 4));
     }
 
+    // handle explicit linebreaks
+    for (let i = output.length - 2; i >= 0; i--) {
+        const potentialLinebreak = output[i];
+        if (potentialLinebreak.linebreak) {
+            const following = output[i+1];
+            if (following.hasOwnProperty('text')) {
+                following.text = '\n' + following.text;
+                // replace the linebreak
+                delete potentialLinebreak.linebreak;
+                // with the needed commands to add a line break
+                potentialLinebreak.continued = false;
+                // without a new paragraph
+                potentialLinebreak.moveUp = true;
+            }
+        }
+    }
+
     // ensure "continued" operations are merged with the latest text node
-    for (let i = operations.length - 1; i >= 0; i--) {
-        const currentOperation = operations[i];
+    for (let i = output.length - 1; i >= 0; i--) {
+        const currentOperation = output[i];
         const hasContinuedProperty = currentOperation.hasOwnProperty('continued');
         const hasTextProperty = currentOperation.hasOwnProperty('text');
         // must move the continued property to the nearest previous text node
         if (hasContinuedProperty && !hasTextProperty) {
             // find previous text operation
             for (let j = i - 1; j >= 0; j--) {
-                const previousOperation = operations[j];
+                const previousOperation = output[j];
                 if (previousOperation.hasOwnProperty('text')) {
                     previousOperation.continued = currentOperation.continued;
                     if (Object.keys(currentOperation).length === 1) {
                         // remove continued operation (if empty)
-                        operations.splice(i, 1);
+                        output.splice(i, 1);
                     } else {
                         // remove the continued key
                         delete currentOperation.continued;
@@ -151,7 +168,6 @@ export default (operations, options) => {
         const op = output[i];
         if (op.softbreak) {
             const prevOp = output.filter(prev.text(i - 1)).pop();
-            const prevOpIndex = output.indexOf(prevOp);
             const nextOp = output.find(next.text(i + 1));
             if (prevOp && nextOp) {
                 if (prevOp.continued) {

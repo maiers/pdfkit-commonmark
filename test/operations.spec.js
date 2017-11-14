@@ -11,7 +11,7 @@ describe('intermediate "operations" format', () => {
 
         describe('escaped list character', function () {
 
-            const chars = [['\\-','-'], ['\\*', '*']];
+            const chars = [['\\-', '-'], ['\\*', '*']];
 
             chars.forEach(c => {
 
@@ -40,7 +40,7 @@ describe('intermediate "operations" format', () => {
 
         describe('escaped heading character', function () {
 
-            const chars = [['\\#','#']];
+            const chars = [['\\#', '#']];
 
             chars.forEach(c => {
 
@@ -60,6 +60,57 @@ describe('intermediate "operations" format', () => {
                         );
 
                     });
+
+                });
+
+            });
+
+        });
+
+        describe('forced line break', function () {
+
+            describe('with two trailing spaces', function () {
+
+                it('works', function () {
+
+                    const parsed = reader.parse('This is a line  \nbreak with only one newline.');
+                    expect(instance.operations(parsed)).to.deep.eql(
+                        [
+                            {
+                                text: 'This is a line',
+                                continued: false
+                            },
+                            {
+                                moveUp: true
+                            },
+                            {
+                                text: '\nbreak with only one newline.',
+                                continued: false
+                            }
+                        ]
+                    );
+
+                });
+
+            });
+
+            describe('with one trailing space', function () {
+
+                it('does not work', function () {
+
+                    const parsed = reader.parse('This is a line \nbreak that will be ignored.');
+                    expect(instance.operations(parsed)).to.deep.eql(
+                        [
+                            {
+                                text: 'This is a line ',
+                                continued: true
+                            },
+                            {
+                                text: 'break that will be ignored.',
+                                continued: false
+                            }
+                        ]
+                    );
 
                 });
 

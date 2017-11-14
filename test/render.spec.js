@@ -61,9 +61,6 @@ This is ***strong and emphasized***.
 
 ### Links (Level 3)
 
-This is [a link](https://www.example.com) within some text. Or another emphasized *[link](#)*. This time we 
-format [only **a part** of the string as **strong**](#). 
-
 #### Heading 4
 
 ## Try CommonMark
@@ -104,6 +101,12 @@ JavaScript reference implementation.
 This is __strong__. This is _emphasized_.
 
 This is ***strong and emphasized***.
+
+This is a forced  
+linebreak. While 
+the following linebreaks 
+will not be visible 
+later.
 
 `);
         const writer = instance;
