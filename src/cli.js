@@ -31,8 +31,6 @@ try {
     process.exit(2);
 }
 
-console.log('fileContents', fileContents);
-
 // get parser instance
 const reader = new commonmark.Parser();
 
