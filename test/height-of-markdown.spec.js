@@ -15,7 +15,7 @@ const recursiveTestTitle = (ctx, tail = '') => {
 
 const outputFilePath = (ctx) => path.join(__dirname, `${recursiveTestTitle(ctx.test || ctx.suite).replace(/[^a-z]+/ig, '_')}.pdf`);
 
-describe('heightOfMarkdown', function () {
+describe('dimensionsOfMarkdown', function () {
 
     const reader = new commonmark.Parser();
     const writer = new CommonmarkPDFRenderer();
@@ -25,13 +25,13 @@ describe('heightOfMarkdown', function () {
         const markdown = 'This is *emphasized*.';
         const parsed = reader.parse(markdown);
 
-        it('is equal to the rendered height', function () {
+        describe('with default (page) width', function () {
 
             const doc = new PDFDocument();
 
             doc.pipe(fs.createWriteStream(outputFilePath(this)));
 
-            const calculatedDimensions = writer.heightOfMarkdown(doc, parsed, {});
+            const calculatedDimensions = writer.dimensionsOfMarkdown(doc, parsed, {});
 
             doc.rect(calculatedDimensions.x, calculatedDimensions.y, calculatedDimensions.w, calculatedDimensions.h)
                 .save()
@@ -47,11 +47,17 @@ describe('heightOfMarkdown', function () {
 
             doc.end();
 
-            expect(calculatedDimensions.h).to.be.eql(renderedDimensions.h);
+            it('is equal to the rendered height', function () {
+                expect(calculatedDimensions.h).to.be.eql(renderedDimensions.h);
+            });
+
+            it('returns same height from heightOfMarkdown', function () {
+                expect(writer.heightOfMarkdown(doc, parsed, {})).to.be.eql(calculatedDimensions.h);
+            });
 
         });
 
-        it('is equal to the rendered height, given a limited width', function () {
+        describe('with limited width', function () {
 
             const doc = new PDFDocument();
 
@@ -59,7 +65,7 @@ describe('heightOfMarkdown', function () {
 
             const pdfkitOptions = {width: 80};
 
-            const calculatedDimensions = writer.heightOfMarkdown(doc, parsed, pdfkitOptions);
+            const calculatedDimensions = writer.dimensionsOfMarkdown(doc, parsed, pdfkitOptions);
 
             doc.rect(calculatedDimensions.x, calculatedDimensions.y, calculatedDimensions.w, calculatedDimensions.h)
                 .save()
@@ -75,8 +81,10 @@ describe('heightOfMarkdown', function () {
 
             doc.end();
 
-            // TODO: Improve precision of this text
-            expect(calculatedDimensions.h).to.be.closeTo(renderedDimensions.h, .001);
+            it('is equal to the rendered height', function () {
+                // TODO: Improve precision of this text
+                expect(calculatedDimensions.h).to.be.closeTo(renderedDimensions.h, .001);
+            });
 
         });
 
@@ -93,7 +101,40 @@ describe('heightOfMarkdown', function () {
 
             doc.pipe(fs.createWriteStream(outputFilePath(this)));
 
-            const calculatedDimensions = writer.heightOfMarkdown(doc, parsed, {});
+            const calculatedDimensions = writer.dimensionsOfMarkdown(doc, parsed, {});
+
+            doc.rect(calculatedDimensions.x, calculatedDimensions.y, calculatedDimensions.w, calculatedDimensions.h)
+                .save()
+                .fill('lightgreen')
+                .restore();
+
+            const renderedDimensions = writer.render(doc, parsed, {});
+
+            doc.rect(renderedDimensions.x, renderedDimensions.y, renderedDimensions.w, renderedDimensions.h)
+                .save()
+                .stroke('ccc')
+                .restore();
+
+            doc.end();
+
+            expect(calculatedDimensions.h).to.be.closeTo(renderedDimensions.h, .001);
+
+        });
+
+    });
+
+    describe('for lists', function () {
+
+        const markdown = 'This is an introduction sentence:\n\n- And one\m- Two\n- Three list items';
+        const parsed = reader.parse(markdown);
+
+        it('is equal to the rendered height', function () {
+
+            const doc = new PDFDocument();
+
+            doc.pipe(fs.createWriteStream(outputFilePath(this)));
+
+            const calculatedDimensions = writer.dimensionsOfMarkdown(doc, parsed, {});
 
             doc.rect(calculatedDimensions.x, calculatedDimensions.y, calculatedDimensions.w, calculatedDimensions.h)
                 .save()

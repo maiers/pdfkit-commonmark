@@ -115,7 +115,7 @@ This is ***strong and emphasized***.
         // add name of the test file
         doc.text(`Location on disc: ${__filename}`).moveDown(2);
 
-        const calculatedDimensions = writer.heightOfMarkdown(doc, parsed, {
+        const calculatedDimensions = writer.dimensionsOfMarkdown(doc, parsed, {
             width: 200
         });
 

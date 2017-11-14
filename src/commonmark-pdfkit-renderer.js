@@ -220,6 +220,22 @@ class CommonmarkPDFKitRenderer {
      * @returns {number} the height which the provided markdown will require upon rendering
      */
     heightOfMarkdown(doc, nodeTree, pdfkitOptions) {
+        return this.dimensionsOfMarkdown(doc, nodeTree, pdfkitOptions).h;
+    }
+
+
+    /**
+     * Return the (estimated) dimensions which the provided
+     * markdown will occupy upon rendering.
+     **
+     * TODO: What to return if the rendering would span multiple pages?
+     *
+     * @param {PDFDocument} doc
+     * @param {object} nodeTree
+     * @param {object} pdfkitOptions
+     * @returns {{x:number,y:number,w:number,h:number}} the dimensions of the bounding box of the rendered markup
+     */
+    dimensionsOfMarkdown(doc, nodeTree, pdfkitOptions) {
 
         const operations = this.operations(nodeTree);
 

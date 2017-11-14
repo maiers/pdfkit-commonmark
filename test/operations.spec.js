@@ -7,6 +7,68 @@ describe('intermediate "operations" format', () => {
     const instance = new CommonmarkPDFRenderer({debug: true});
     const reader = new commonmark.Parser();
 
+    describe('special markdown', function () {
+
+        describe('escaped list character', function () {
+
+            const chars = [['\\-','-'], ['\\*', '*']];
+
+            chars.forEach(c => {
+
+                const parsed = reader.parse(c[0]);
+
+                describe(c[0], function () {
+
+                    it('returns a string', function () {
+
+                        expect(instance.operations(parsed)).to.deep.eql(
+                            [
+                                {
+                                    text: c[1],
+                                    continued: false
+                                }
+                            ]
+                        );
+
+                    });
+
+                });
+
+            });
+
+        });
+
+        describe('escaped heading character', function () {
+
+            const chars = [['\\#','#']];
+
+            chars.forEach(c => {
+
+                const parsed = reader.parse(c[0]);
+
+                describe(c[0], function () {
+
+                    it('returns a string', function () {
+
+                        expect(instance.operations(parsed)).to.deep.eql(
+                            [
+                                {
+                                    text: c[1],
+                                    continued: false
+                                }
+                            ]
+                        );
+
+                    });
+
+                });
+
+            });
+
+        });
+
+    });
+
     describe('emphasize', () => {
 
         it('single *', () => {
@@ -503,6 +565,30 @@ describe('intermediate "operations" format', () => {
     });
 
     describe('list', () => {
+
+        describe('only one "-"', function () {
+
+            let parsed;
+
+            beforeEach(function () {
+                parsed = reader.parse('-');
+            });
+
+            it('returns an empty list', function () {
+
+                expect(instance.operations(parsed)).to.deep.eql(
+                    [
+                        {
+                            list: [],
+                            listItemStyle: 'disc'
+                        }
+                    ]
+                );
+
+            });
+
+        });
+
 
         it('simple, with 2 items', () => {
 
