@@ -26,22 +26,22 @@ This renderer does currently _partially_ (hey, this is an 0.x version) support:
 
 - paragraphs
 - softbreaks
+- explicit linebreaks
 - headers
 - links
 - strong
 - emph
 - flat lists without formatting
 
-This renderer does currently __not__ support:
+This renderer does currently __not__ support (order by priority):
 
-- explicit linebreaks
-- html
-- image
+- lists with formatting
+- nested lists
 - code
 - block quotes
+- image
+- html
 - tables
-- nested lists
-- lists with formatting
 
 Pull requests are welcome.
 
