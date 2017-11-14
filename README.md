@@ -4,11 +4,11 @@ A pdf renderer for
 [commonmark](https://github.com/commonmark). 
 Or a commonmark renderer for 
 [pdfkit](https://github.com/devongovett/pdfkit). 
-Whatevery you prefer.
 
-It relies on the commonmark feature to process the [abstract
-syntax tree from the commonmark parser](https://github.com/commonmark/commonmark.js#usage) to create a custom
-renderer.
+It relies on the [abstract
+syntax tree created by the commonmark parser](https://github.com/commonmark/commonmark.js#usage) 
+to create a custom renderer using 
+[pdfkit](http://pdfkit.org/docs/text.html).
 
 The PDF version of the [README](README.pdf) is created using the 
 cli script of pdfkit-commonmark.
@@ -22,9 +22,10 @@ following command after installing npm.
 
 ## Known limitations
 
-This renderer does currently support:
+This renderer does currently _partially_ (hey, this is an 0.x version) support:
 
 - paragraphs
+- softbreaks
 - headers
 - links
 - strong
@@ -33,7 +34,6 @@ This renderer does currently support:
 
 This renderer does currently __not__ support:
 
-- explicit softbreaks
 - explicit linebreaks
 - html
 - image

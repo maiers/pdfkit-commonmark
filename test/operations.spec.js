@@ -4,7 +4,7 @@ import CommonmarkPDFRenderer from '../src/commonmark-pdfkit-renderer';
 
 describe('intermediate "operations" format', () => {
 
-    const instance = new CommonmarkPDFRenderer();
+    const instance = new CommonmarkPDFRenderer({debug: true});
     const reader = new commonmark.Parser();
 
     describe('emphasize', () => {
@@ -348,9 +348,9 @@ describe('intermediate "operations" format', () => {
 
         });
 
-        it('add missing whitespace to adjacent texts', () => {
+        it('add missing whitespace before softbreak followed by an emphasize', () => {
 
-            const parsed = reader.parse('This is the part with a missing whitespace\nat the end.');
+            const parsed = reader.parse('This is the part with a missing whitespace\n*at* the end.');
 
             expect(instance.operations(parsed)).to.deep.eql(
                 [
@@ -359,7 +359,114 @@ describe('intermediate "operations" format', () => {
                         continued: true
                     },
                     {
-                        text: 'at the end.',
+                        font: 'italic'
+                    },
+                    {
+                        text: 'at',
+                        continued: true
+                    },
+                    {
+                        font: 'default'
+                    },
+                    {
+                        text: ' the end.',
+                        continued: false
+                    }
+                ]
+            );
+
+        });
+
+        it('add missing whitespace before softbreak on an emphasize', () => {
+
+            const parsed = reader.parse('This is the part with the *emphasize*\nfollowed with a missing whitespace.');
+
+            expect(instance.operations(parsed)).to.deep.eql(
+                [
+                    {
+                        text: 'This is the part with the ',
+                        continued: true
+                    },
+                    {
+                        font: 'italic'
+                    },
+                    {
+                        text: 'emphasize ',
+                        continued: true
+                    },
+                    {
+                        font: 'default'
+                    },
+                    {
+                        text: 'followed with a missing whitespace.',
+                        continued: false
+                    }
+                ]
+            );
+
+        });
+
+        it('add missing whitespace after softbreak after a link', () => {
+
+            const parsed = reader.parse('This is the part with the [linkText](linkHref)\nfollowed with a missing whitespace.');
+
+            expect(instance.operations(parsed)).to.deep.eql(
+                [
+                    {
+                        text: 'This is the part with the ',
+                        continued: true
+                    },
+                    {
+                        fillColor: 'blue',
+                        save: true
+                    },
+                    {
+                        text: 'linkText',
+                        continued: true,
+                        link: 'linkHref',
+                        underline: true
+                    },
+                    {
+                        restore: true
+                    },
+                    {
+                        text: ' followed with a missing whitespace.',
+                        continued: false
+                    }
+                ]
+            );
+
+        });
+
+        it('handles tailing whitespace before softbreaks correctly', () => {
+
+            const parsed = reader.parse('This is the part with the [linkText](linkHref) \nfollowed with a missing whitespace.');
+
+            expect(instance.operations(parsed)).to.deep.eql(
+                [
+                    {
+                        text: 'This is the part with the ',
+                        continued: true
+                    },
+                    {
+                        fillColor: 'blue',
+                        save: true
+                    },
+                    {
+                        text: 'linkText',
+                        continued: true,
+                        link: 'linkHref',
+                        underline: true
+                    },
+                    {
+                        restore: true
+                    },
+                    {
+                        text: ' ',
+                        continued: true
+                    },
+                    {
+                        text: 'followed with a missing whitespace.',
                         continued: false
                     }
                 ]
