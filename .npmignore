@@ -1,0 +1,10 @@
+
+/npm-debug.log
+/.idea/
+/node_modules/
+/.nyc_output/
+/coverage/
+/test/
+.gitignore
+.npmignore
+/README.pdf

@@ -21,7 +21,7 @@
     "test:coverage": "nyc --reporter=html --reporter=text npm run test",
     "lint": "eslint src/",
     "lint:fix": "eslint --fix src/",
-    "prepublish": "npm run build"
+    "prepublishOnly": "npm run clean && npm run build"
   },
   "keywords": [
     "markdown",
