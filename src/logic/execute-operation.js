@@ -43,7 +43,7 @@ export default (operation, doc, options) => {
     }
 
     if (operation.list) {
-        doc.list(operation.list);
+        doc.list(operation.list, options.pdfkit);
     }
 
     if (operation.restore) {

@@ -154,6 +154,32 @@ describe('dimensionsOfMarkdown', function () {
 
         });
 
+        it('is equal to the rendered height for a very narrow list', function () {
+
+            const doc = new PDFDocument();
+
+            doc.pipe(fs.createWriteStream(outputFilePath(this)));
+
+            const calculatedDimensions = writer.dimensionsOfMarkdown(doc, parsed, {width: 50});
+
+            doc.rect(calculatedDimensions.x, calculatedDimensions.y, calculatedDimensions.w, calculatedDimensions.h)
+                .save()
+                .fill('lightgreen')
+                .restore();
+
+            const renderedDimensions = writer.render(doc, parsed, {width: 50});
+
+            doc.rect(renderedDimensions.x, renderedDimensions.y, renderedDimensions.w, renderedDimensions.h)
+                .save()
+                .stroke('ccc')
+                .restore();
+
+            doc.end();
+
+            expect(calculatedDimensions.h).to.be.closeTo(renderedDimensions.h, .001);
+
+        });
+
     });
 
 });

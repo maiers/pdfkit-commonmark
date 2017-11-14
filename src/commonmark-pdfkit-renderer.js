@@ -304,9 +304,7 @@ class CommonmarkPDFKitRenderer {
             if (op.list && op.list.length > 0) {
 
                 op.list.forEach(l => {
-                    // TODO: Use the actual list offset, instead of some randomly choosen value
-                    const listOffsetLeft = 10;
-                    heightChange += doc.heightOfString(l, {width: pdfkitOptions.width - listOffsetLeft});
+                    heightChange += doc.heightOfString(l, {width: pdfkitOptions.width});
                 });
 
                 if (this.options.debug) {
