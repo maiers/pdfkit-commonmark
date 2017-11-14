@@ -1,6 +1,6 @@
 import {expect} from 'chai';
 import commonmark from 'commonmark';
-import CommonmarkPDFRenderer from '../src/commonmark-pdf-renderer';
+import CommonmarkPDFRenderer from '../src/commonmark-pdfkit-renderer';
 
 describe('intermediate "operations" format', () => {
 

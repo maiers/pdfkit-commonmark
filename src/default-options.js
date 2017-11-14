@@ -6,6 +6,7 @@ export default {
         italic: 'Times-Italic',
         'bold-italic': 'Times-BoldItalic',
         'heading-bold': 'Helvetica-Bold',
-        'heading-default': 'Helvetica'
+        'heading-default': 'Helvetica',
+        'code': 'Courier'
     }
 };

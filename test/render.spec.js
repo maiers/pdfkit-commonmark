@@ -5,7 +5,7 @@ import chai, {expect} from 'chai';
 import chaiFS from 'chai-fs';
 import PDFDocument from 'pdfkit';
 import commonmark from 'commonmark';
-import CommonmarkPDFRenderer from '../src/commonmark-pdf-renderer';
+import CommonmarkPDFRenderer from '../src/commonmark-pdfkit-renderer';
 
 chai.use(chaiFS);
 

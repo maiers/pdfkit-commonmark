@@ -4,7 +4,7 @@ import fs from 'fs';
 import path from 'path';
 import PDFDocument from 'pdfkit';
 import commonmark from 'commonmark';
-import CommonmarkPDFRenderer from '../src/commonmark-pdf-renderer';
+import CommonmarkPDFRenderer from '../src/commonmark-pdfkit-renderer';
 
 const recursiveTestTitle = (ctx, tail = '') => {
     if (ctx) {

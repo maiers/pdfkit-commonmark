@@ -4,12 +4,11 @@ import executeOperation from './logic/execute-operation';
 import * as Font from './logic/font';
 import defaultOptions from './default-options';
 
-
 /**
  * An implementation of an renderer for commonmark. Using
  * pdfkit for rendering of the pdf.
  */
-class CommonmarkPDFRenderer {
+class CommonmarkPDFKitRenderer {
 
     constructor(options = {}) {
 
@@ -76,7 +75,7 @@ class CommonmarkPDFRenderer {
                         });
                         break;
                     case 'html_inline':
-                        // not supported yet
+                        // no plan to support this
                         break;
                     case 'link':
                         operations.push({
@@ -89,9 +88,11 @@ class CommonmarkPDFRenderer {
                         break;
                     case 'image':
                         // not supported yet
+                        // TODO: Support image
                         break;
                     case 'code':
                         // not supported yet
+                        // TODO: Support inline code
                         break;
                     case 'document':
                         // not needed?
@@ -101,14 +102,15 @@ class CommonmarkPDFRenderer {
                         break;
                     case 'block_quote':
                         // not supported yet
+                        // TODO: Support block quote
                         break;
                     case 'item':
                         operations.push({
-
                             listItem: node.literal
                         });
                         break;
                     case 'list':
+                        // TODO: Support nested lists with formatting
                         operations.push({
                             startList: true,
                             listItemStyle: 'disc'
@@ -121,12 +123,15 @@ class CommonmarkPDFRenderer {
                         });
                         break;
                     case 'code_block':
-                        // ignore
+                        // not supported yet
+                        // TODO: Support code blocks
                         break;
                     case 'html_block':
-                        // ignore
+                        // no plan to support this
                         break;
                     case 'thematic_break':
+                        // not supported yet
+                        // TODO: Support thematic breaks
                         break;
                 }
             } else {
@@ -200,6 +205,20 @@ class CommonmarkPDFRenderer {
 
     }
 
+    /**
+     * Return the (estimated) height which the provided
+     * markdown will require upon rendering.
+     *
+     * Similar to the 'heightOfString' function provided
+     * by pdfkit. It's also used here.
+     *
+     * TODO: What to return if the rendering would span multiple pages?
+     *
+     * @param {PDFDocument} doc
+     * @param {object} nodeTree
+     * @param {object} pdfkitOptions
+     * @returns {number} the height which the provided markdown will require upon rendering
+     */
     heightOfMarkdown(doc, nodeTree, pdfkitOptions) {
 
         const operations = this.operations(nodeTree);
@@ -258,7 +277,6 @@ class CommonmarkPDFRenderer {
 
             }
 
-
             if (this.options.debug) {
                 console.log('height change', heightChange, 'for', op);
             }
@@ -272,10 +290,13 @@ class CommonmarkPDFRenderer {
     }
 
     /**
-     * Render into an pdf document
+     * Render into an pdf document.
+     *
+     * TODO: What to return if the rendering spans multiple pages?
      *
      * @param {PDFDocument} doc to rende into
      * @param {object} nodeTree
+     * @returns {{x:number,y:number,w:number,h:number}} The dimensions of the rendered markdown.
      */
     render(doc, nodeTree, pdfkitOptions) {
 
@@ -306,4 +327,4 @@ class CommonmarkPDFRenderer {
 
 }
 
-export default CommonmarkPDFRenderer;
+export default CommonmarkPDFKitRenderer;
