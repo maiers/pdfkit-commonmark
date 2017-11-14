@@ -2,7 +2,7 @@
   "name": "pdfkit-commonmark",
   "version": "0.0.4",
   "description": "A markdown renderer (using commonmark) for pdfkit.",
-  "main": "dist/commonmark-renderer.js",
+  "main": "dist/commonmark-pdfkit-renderer.js",
   "bin": "dist/cli.js",
   "directories": {
     "lib": "src/"
