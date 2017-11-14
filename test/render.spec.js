@@ -11,7 +11,9 @@ chai.use(chaiFS);
 
 describe('final pdf render', function () {
 
-    const instance = new CommonmarkPDFRenderer();
+    const instance = new CommonmarkPDFRenderer({
+        debug: true
+    });
     const reader = new commonmark.Parser();
 
     it('simple', function () {
@@ -88,6 +90,59 @@ JavaScript reference implementation.
         console.log('written to', outputFilePath);
 
         expect(outputFilePath).to.be.a.file();
+
+    });
+
+    it('limited width', function () {
+
+        const outputFilePath = path.join(`${__filename}-limited-width.pdf`);
+
+        const parsed = reader.parse(`
+
+# Some simple formats (Level 1)
+
+This is __strong__. This is _emphasized_.
+
+This is ***strong and emphasized***.
+
+`);
+        const writer = instance;
+
+        const doc = new PDFDocument();
+
+        doc.pipe(fs.createWriteStream(outputFilePath));
+
+        // add name of the test file
+        doc.text(`Location on disc: ${__filename}`).moveDown(2);
+
+        const calculatedDimensions = writer.heightOfMarkdown(doc, parsed, {
+            width: 200
+        });
+
+        doc.rect(calculatedDimensions.x, calculatedDimensions.y, calculatedDimensions.w, calculatedDimensions.h)
+            .save()
+            .fill('lightgreen')
+            .restore();
+
+        const renderedDimensions = writer.render(doc, parsed, {
+            width: 200
+        });
+
+        doc.rect(renderedDimensions.x, renderedDimensions.y, renderedDimensions.w, renderedDimensions.h)
+            .save()
+            .stroke()
+            .restore();
+
+        doc.end();
+
+        console.log('written to', outputFilePath);
+
+        expect(outputFilePath).to.be.a.file();
+        expect(renderedDimensions.x).to.be.greaterThan(0);
+
+        expect(calculatedDimensions.h).to.be.closeTo(renderedDimensions.h, .001);
+
+        console.log('Dimensions', renderedDimensions);
 
     });
 

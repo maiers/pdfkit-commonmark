@@ -2,17 +2,8 @@ import deepDefaults from 'deep-defaults';
 import reduceOperations from './logic/reduce-operations';
 import executeOperation from './logic/execute-operation';
 import * as Font from './logic/font';
+import defaultOptions from './default-options';
 
-const defaultOptions = {
-    fonts: {
-        'default': 'Times-Roman',
-        bold: 'Times-Bold',
-        italic: 'Times-Italic',
-        'bold-italic': 'Times-BoldItalic',
-        'heading-bold': 'Helvetica-Bold',
-        'heading-default': 'Helvetica'
-    }
-};
 
 /**
  * An implementation of an renderer for commonmark. Using
@@ -26,7 +17,9 @@ class CommonmarkPDFRenderer {
             throw new Error('options must be a plain object');
         }
 
+        // apply default options
         deepDefaults(options, defaultOptions);
+
         this.options = options;
 
     }
@@ -63,10 +56,14 @@ class CommonmarkPDFRenderer {
                         });
                         break;
                     case 'softbreak':
-                        // not supported yet
+                        operations.push({
+                            softbreak: true
+                        });
                         break;
                     case 'linebreak':
-                        // not supported yet
+                        operations.push({
+                            linebreak: true
+                        });
                         break;
                     case 'emph':
                         operations.push({
@@ -182,8 +179,8 @@ class CommonmarkPDFRenderer {
                         break;
                     case 'heading':
                         operations.push({
-                            restoreFont: true,
-                            restoreFontSize: true,
+                            font: 'default',
+                            fontSize: this.options.fontSize,
                             moveDown: true,
                             continued: false
                         });
@@ -199,7 +196,78 @@ class CommonmarkPDFRenderer {
 
         }
 
-        return reduceOperations(operations);
+        return reduceOperations(operations, this.options);
+
+    }
+
+    heightOfMarkdown(doc, nodeTree, pdfkitOptions) {
+
+        const operations = this.operations(nodeTree);
+
+        const targetWidth = (pdfkitOptions && pdfkitOptions.width)
+            || (doc.page && doc.page.width - doc.page.margins.left - doc.page.margins.right);
+
+        const initialPosition = {x: doc.x, y: doc.y};
+        const dimensions = Object.assign({}, initialPosition, {
+            w: targetWidth,
+            h: 0
+        });
+
+        let currentLineHeight = 0;
+        let currentFontSize = this.options.fontSize;
+        let continuousText = '';
+        operations.forEach(op => {
+
+            let heightChange = 0;
+
+            // Must move down BEFORE changing the font!
+            // As the moveDown is based on the PREVIOUS lines height,
+            // not on the next lines height.
+            if (op.moveDown) {
+                currentLineHeight = doc._font.lineHeight(currentFontSize, true);
+                heightChange += currentLineHeight * op.moveDown;
+            }
+
+            // change the font
+            if (op.font) {
+                const resolvedFont = Font.forInternalName(op.font, this.options);
+                doc.font(resolvedFont);
+            }
+
+            // change the fontSize
+            if (op.fontSize) {
+                currentFontSize = op.fontSize;
+                doc.fontSize(currentFontSize);
+            }
+
+            if (op.text) {
+
+                continuousText += op.text;
+
+                if (!op.continued) {
+
+                    heightChange += doc.heightOfString(continuousText, pdfkitOptions);
+
+                    if (this.options.debug) {
+                        console.log('\t', heightChange, `from text "${continuousText}"`);
+                    }
+
+                    continuousText = '';
+
+                }
+
+            }
+
+
+            if (this.options.debug) {
+                console.log('height change', heightChange, 'for', op);
+            }
+
+            dimensions.h += heightChange;
+
+        });
+
+        return dimensions;
 
     }
 
@@ -209,13 +277,30 @@ class CommonmarkPDFRenderer {
      * @param {PDFDocument} doc to rende into
      * @param {object} nodeTree
      */
-    render(doc, nodeTree) {
+    render(doc, nodeTree, pdfkitOptions) {
 
         const operations = this.operations(nodeTree);
 
+        const initialPosition = {
+            y: doc.y,
+            x: doc.x
+        };
+
         operations.forEach(op => {
-            executeOperation(op, doc, this.options);
+            executeOperation(op, doc, Object.assign({}, this.options, {pdfkit: pdfkitOptions}));
         });
+
+        const finalPosition = {
+            y: doc.y,
+            x: doc.x
+        };
+
+        return {
+            y: initialPosition.y,
+            x: initialPosition.x,
+            w: (pdfkitOptions && pdfkitOptions.width) || (doc && doc.page && (doc.page.width - doc.page.margins.left - doc.page.margins.right)) || 0,
+            h: finalPosition.y - initialPosition.y
+        };
 
     }
 

@@ -24,9 +24,6 @@ describe('intermediate "operations" format', () => {
                     },
                     {
                         font: 'default'
-                    },
-                    {
-                        moveDown: true
                     }
                 ]
             );
@@ -48,9 +45,6 @@ describe('intermediate "operations" format', () => {
                     },
                     {
                         font: 'default'
-                    },
-                    {
-                        moveDown: true
                     }
                 ]
             );
@@ -72,9 +66,6 @@ describe('intermediate "operations" format', () => {
                     },
                     {
                         font: 'default'
-                    },
-                    {
-                        moveDown: true
                     }
                 ]
             );
@@ -118,9 +109,6 @@ describe('intermediate "operations" format', () => {
                     {
                         text: ' word.',
                         continued: false
-                    },
-                    {
-                        moveDown: true
                     }
                 ]
             );
@@ -146,9 +134,6 @@ describe('intermediate "operations" format', () => {
                     },
                     {
                         font: 'default'
-                    },
-                    {
-                        moveDown: true
                     }
                 ]
             );
@@ -170,9 +155,6 @@ describe('intermediate "operations" format', () => {
                     },
                     {
                         font: 'default'
-                    },
-                    {
-                        moveDown: true
                     }
                 ]
             );
@@ -201,9 +183,6 @@ describe('intermediate "operations" format', () => {
                     },
                     {
                         restore: true
-                    },
-                    {
-                        moveDown: true
                     }
                 ]
             );
@@ -236,9 +215,6 @@ describe('intermediate "operations" format', () => {
                     {
                         text: ' within some text.',
                         continued: false
-                    },
-                    {
-                        moveDown: true
                     }
                 ]
             );
@@ -271,9 +247,6 @@ describe('intermediate "operations" format', () => {
                     {
                         text: ' within some text.',
                         continued: false
-                    },
-                    {
-                        moveDown: true
                     }
                 ]
             );
@@ -304,9 +277,6 @@ describe('intermediate "operations" format', () => {
                     },
                     {
                         font: 'default'
-                    },
-                    {
-                        moveDown: true
                     }
                 ]
             );
@@ -349,9 +319,6 @@ describe('intermediate "operations" format', () => {
                     },
                     {
                         restore: true
-                    },
-                    {
-                        moveDown: true
                     }
                 ]
             );
@@ -375,9 +342,6 @@ describe('intermediate "operations" format', () => {
                     {
                         text: 'at the end.',
                         continued: false
-                    },
-                    {
-                        moveDown: true
                     }
                 ]
             );
@@ -397,9 +361,6 @@ describe('intermediate "operations" format', () => {
                     {
                         text: 'at the end.',
                         continued: false
-                    },
-                    {
-                        moveDown: true
                     }
                 ]
             );
@@ -426,9 +387,6 @@ describe('intermediate "operations" format', () => {
                     {
                         text: 'Line two.',
                         continued: false
-                    },
-                    {
-                        moveDown: true
                     }
                 ]
             );
@@ -451,15 +409,39 @@ describe('intermediate "operations" format', () => {
                             'Item 1',
                             'Item 2'
                         ]
-                    },
-                    {
-                        moveDown: true
                     }
                 ]
             );
 
         });
 
+
+    });
+
+    describe('heading', () => {
+
+        it('level 1', () => {
+
+            const parsed = reader.parse('# Headline');
+
+            expect(instance.operations(parsed)).to.deep.eql(
+                [
+                    {
+                        font: 'heading-bold',
+                        fontSize: 12 * 1.4
+                    },
+                    {
+                        text: 'Headline',
+                        continued: false
+                    },
+                    {
+                        font: 'default',
+                        fontSize: 12
+                    }
+                ]
+            );
+
+        });
 
     });
 

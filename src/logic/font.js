@@ -23,3 +23,22 @@ export const sizeForHeadingLevel = (level, baseSize = 12) => {
             return baseSize;
     }
 };
+
+/**
+ * Get the defined font for the given
+ * internal name from the supplied
+ * options map.
+ *
+ * @param {string} internalName
+ * @param {object} options
+ * @returns {string} The actual font name to use with pdfkit
+ */
+export const forInternalName = (internalName, options) => {
+
+    if (!options || !options.fonts) {
+        throw new Error('missing options.fonts');
+    }
+
+    return options.fonts[internalName];
+
+};

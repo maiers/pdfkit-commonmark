@@ -16,13 +16,15 @@ const mergeFonts = (font0, font1) => {
  * @param operations
  * @returns {Array}
  */
-export default (operations) => {
+export default (operations, options) => {
 
     // some operations cannot be mixed with others
     // when calling pdfkit
     const output = [...operations];
 
-    console.log('\n\n__\n', JSON.stringify(operations, null, 4));
+    if (!options || options.debug) {
+        console.log('\nOperations:\n', JSON.stringify(operations, null, 4));
+    }
 
     // ensure "continued" operations are merged with the latest text node
     for (let i = operations.length - 1; i >= 0; i--) {
@@ -141,7 +143,21 @@ export default (operations) => {
         }
     }
 
-    // add missing space between inline texts
+    // add missing space at softbreaks between texts
+    for (let i = 1; i < output.length - 1; i++) {
+        const op = output[i];
+        if (op.softbreak) {
+            const prev = output[i - 1];
+            const next = output[i + 1];
+            if (prev.text && next.text && prev.continued && prev.text.substr(-1) !== ' ') {
+                prev.text += ' ';
+            }
+            // remove softbreak
+            output.splice(i, 1);
+            i--;
+        }
+    }
+    /*
     for (let i = 0; i < output.length; i++) {
         const op = output[i];
         // missing whitespace at end
@@ -153,6 +169,7 @@ export default (operations) => {
             }
         }
     }
+    */
 
     // remove unnecessary save operations
     // triggered by font removals
@@ -182,6 +199,15 @@ export default (operations) => {
                 // to ensure not skipping one element
                 i--;
             }
+        }
+    }
+
+    // remove trailing moveDown
+    const last = output[output.length - 1];
+    if (last.moveDown) {
+        delete last.moveDown;
+        if (Object.keys(last).length === 0) {
+            output.pop();
         }
     }
 
