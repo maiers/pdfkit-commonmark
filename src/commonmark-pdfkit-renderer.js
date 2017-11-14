@@ -275,20 +275,42 @@ class CommonmarkPDFKitRenderer {
                 doc.fontSize(currentFontSize);
             }
 
+            // calculate height for text
             if (op.text) {
 
+                // if we have continuous text, we collect it all, and then do
+                // a single height calculation for the full text.
                 continuousText += op.text;
 
                 if (!op.continued) {
 
+                    // might be inaccurate, due to different fonts?
+                    // TODO: Continuous text height might need to take different fonts into account
                     heightChange += doc.heightOfString(continuousText, pdfkitOptions);
 
                     if (this.options.debug) {
                         console.log('\t', heightChange, `from text "${continuousText}"`);
                     }
 
+                    // make sure the text already included in the height
+                    // is not evaluated again
                     continuousText = '';
 
+                }
+
+            }
+
+            // calculate height for lists
+            if (op.list && op.list.length > 0) {
+
+                op.list.forEach(l => {
+                    // TODO: Use the actual list offset, instead of some randomly choosen value
+                    const listOffsetLeft = 10;
+                    heightChange += doc.heightOfString(l, {width: pdfkitOptions.width - listOffsetLeft});
+                });
+
+                if (this.options.debug) {
+                    console.log('\t', heightChange, `from list`);
                 }
 
             }
