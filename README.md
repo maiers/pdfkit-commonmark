@@ -1,17 +1,24 @@
 # pdfkit-commonmark
 
-A pdf renderer for 
-[commonmark](https://github.com/commonmark). 
-Or a commonmark renderer for 
-[pdfkit](https://github.com/devongovett/pdfkit). 
+Renders [commonmark](https://github.com/commonmark) 
+style markdown to pdf (see [usage/cli](#cli)). 
+
+Allows users of
+[pdfkit](https://github.com/devongovett/pdfkit)
+to render commonmark style markdown into 
+their document (see [usage/code](#code)). 
 
 It relies on the [abstract
 syntax tree created by the commonmark parser](https://github.com/commonmark/commonmark.js#usage) 
 to create a custom renderer using 
 [pdfkit](http://pdfkit.org/docs/text.html).
+To facilitate unit testing, the AST gets 
+transformed into an intermediate (testable) 
+list of operations which will finally be 
+transformed into pdfkit api calls.
 
-The PDF version of the [README](README.pdf) is created using the 
-cli script of pdfkit-commonmark.
+The [PDF version](README.pdf) of this README has been 
+created using the pdfkit-commonmark cli script.
 
 ## Install
 
