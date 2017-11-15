@@ -1,12 +1,14 @@
 # pdfkit-commonmark
 
-Renders [commonmark](https://github.com/commonmark) 
-style markdown to pdf (see [usage/cli](#cli)). 
-
 Allows users of
 [pdfkit](https://github.com/devongovett/pdfkit)
 to render commonmark style markdown into 
 their document (see [usage/code](#code)). 
+
+Renders [commonmark](https://github.com/commonmark) 
+style markdown to pdf (see [usage/cli](#cli)). 
+
+## Info
 
 It relies on the [abstract
 syntax tree created by the commonmark parser](https://github.com/commonmark/commonmark.js#usage) 
