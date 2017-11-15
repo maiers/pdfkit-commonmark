@@ -1,19 +1,10 @@
 import {describe, it} from 'mocha';
 import {expect} from 'chai';
 import fs from 'fs';
-import path from 'path';
 import PDFDocument from 'pdfkit';
 import commonmark from 'commonmark';
 import CommonmarkPDFRenderer from '../src/commonmark-pdfkit-renderer';
-
-const recursiveTestTitle = (ctx, tail = '') => {
-    if (ctx) {
-        return recursiveTestTitle(ctx.parent, ctx.title + ' ' + tail);
-    }
-    return tail;
-};
-
-const outputFilePath = (ctx) => path.join(__dirname, `${recursiveTestTitle(ctx.test || ctx.suite).replace(/[^a-z]+/ig, '_')}.pdf`);
+import * as TestUtils from './test-utils';
 
 describe('dimensionsOfMarkdown', function () {
 
@@ -29,7 +20,7 @@ describe('dimensionsOfMarkdown', function () {
 
             const doc = new PDFDocument();
 
-            doc.pipe(fs.createWriteStream(outputFilePath(this)));
+            doc.pipe(fs.createWriteStream(TestUtils.outputFilePath(this)));
 
             const calculatedDimensions = writer.dimensionsOfMarkdown(doc, parsed, {});
 
@@ -61,7 +52,7 @@ describe('dimensionsOfMarkdown', function () {
 
             const doc = new PDFDocument();
 
-            doc.pipe(fs.createWriteStream(outputFilePath(this)));
+            doc.pipe(fs.createWriteStream(TestUtils.outputFilePath(this)));
 
             const pdfkitOptions = {width: 80};
 
@@ -99,7 +90,7 @@ describe('dimensionsOfMarkdown', function () {
 
             const doc = new PDFDocument();
 
-            doc.pipe(fs.createWriteStream(outputFilePath(this)));
+            doc.pipe(fs.createWriteStream(TestUtils.outputFilePath(this)));
 
             const calculatedDimensions = writer.dimensionsOfMarkdown(doc, parsed, {});
 
@@ -132,7 +123,7 @@ describe('dimensionsOfMarkdown', function () {
 
             const doc = new PDFDocument();
 
-            doc.pipe(fs.createWriteStream(outputFilePath(this)));
+            doc.pipe(fs.createWriteStream(TestUtils.outputFilePath(this)));
 
             const calculatedDimensions = writer.dimensionsOfMarkdown(doc, parsed, {});
 
@@ -158,7 +149,7 @@ describe('dimensionsOfMarkdown', function () {
 
             const doc = new PDFDocument();
 
-            doc.pipe(fs.createWriteStream(outputFilePath(this)));
+            doc.pipe(fs.createWriteStream(TestUtils.outputFilePath(this)));
 
             const calculatedDimensions = writer.dimensionsOfMarkdown(doc, parsed, {width: 50});
 

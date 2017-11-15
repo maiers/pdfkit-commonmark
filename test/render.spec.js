@@ -6,6 +6,8 @@ import chaiFS from 'chai-fs';
 import PDFDocument from 'pdfkit';
 import commonmark from 'commonmark';
 import CommonmarkPDFRenderer from '../src/commonmark-pdfkit-renderer';
+import * as TestUtils from './test-utils';
+
 
 chai.use(chaiFS);
 
@@ -146,6 +148,64 @@ later.
         expect(calculatedDimensions.h).to.be.closeTo(renderedDimensions.h, .001);
 
         console.log('Dimensions', renderedDimensions);
+
+    });
+
+    describe('forced linebreaks', function () {
+
+
+        const parsed = reader.parse(`
+
+Multiple **strong**  
+forced  
+linebreaks  
+over  
+six  
+lines.
+
+`);
+        const writer = instance;
+
+        it('full width', function () {
+
+            const outputFilePath = TestUtils.outputFilePath(this);
+
+            const doc = new PDFDocument();
+
+            doc.pipe(fs.createWriteStream(outputFilePath));
+
+            // add name of the test file
+            doc.text(`Location on disc: ${outputFilePath}`).moveDown(2);
+
+            const renderedDimensions = writer.render(doc, parsed);
+            doc.end();
+
+            console.log('written to', outputFilePath);
+            expect(outputFilePath).to.be.a.file();
+
+        });
+
+        it('limited width', function () {
+
+            const outputFilePath = TestUtils.outputFilePath(this);
+
+            const doc = new PDFDocument();
+
+            doc.pipe(fs.createWriteStream(outputFilePath));
+
+            // add name of the test file
+            doc.text(`Location on disc: ${outputFilePath}`).moveDown(2);
+
+            const renderedDimensions = writer.render(doc, parsed, {
+                width: 200
+            });
+            doc.end();
+
+            console.log('written to', outputFilePath);
+            expect(outputFilePath).to.be.a.file();
+
+        });
+
 
     });
 
