@@ -118,6 +118,27 @@ describe('intermediate "operations" format', () => {
 
         });
 
+        describe('greater-than char (>)', function () {
+
+            it('as only character', function () {
+
+                const parsed = reader.parse('>');
+                expect(instance.operations(parsed)).to.deep.eql(
+                    [
+                        {
+                            text: '>',
+                            continued: false
+                        },
+                        {
+                            moveDown: true
+                        }
+                    ]
+                );
+
+            });
+
+        });
+
     });
 
     describe('emphasize', () => {
