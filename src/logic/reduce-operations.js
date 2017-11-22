@@ -221,7 +221,7 @@ export default (operations, options) => {
 
     // remove trailing moveDown
     const last = output[output.length - 1];
-    if (last.moveDown) {
+    if (last && last.moveDown) {
         delete last.moveDown;
         if (Object.keys(last).length === 0) {
             output.pop();
