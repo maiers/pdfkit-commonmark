@@ -29,17 +29,56 @@ following command after installing npm.
 
     npm install --save pdfkit-commonmark
 
-## Known limitations
+## Supported markdown features
 
-This renderer does support:
+### Paragraphs
+
+Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. 
+
+Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla facilisis at vero eros et accumsan et iusto odio dignissim qui blandit praesent luptatum zzril delenit augue duis dolore te feugait nulla facilisi. 
+
+### Headers (level 3)
+
+#### Level 4
+
+##### Level 5
+
+### Emphasize, Strong and Links
+
+__Lorem ipsum__ dolor _sit_ amet, __*consetetur*__ sadipscin. [source](http://www.loremipsum.de/) 
+
+### Softbreaks (compare pdf with markdown source)
+
+Duis autem vel eum iriure dolor in 
+hendrerit in vulputate velit esse 
+molestie consequat, vel illum dolore 
+eu feugiat nulla facilisis at vero
+eros et accumsan et iusto odio 
+dignissim qui blandit praesent 
+luptatum zzril delenit augue duis 
+dolore te feugait nulla facilisi.
+
+### Linebreaks (two spaces at the end of the line)
+
+Duis autem vel eum iriure dolor in  
+hendrerit in vulputate velit esse  
+molestie consequat, vel illum dolore  
+eu feugiat nulla facilisis at vero  
+eros et accumsan et iusto odio  
+dignissim qui blandit praesent  
+luptatum zzril delenit augue duis  
+dolore te feugait nulla facilisi.
+
+### Lists
 
 - paragraphs
 - headers
-- emphasize
-- strong
-- links
+- inline formatting
+   1. emphasize
+   2. strong
+   3. links
 - softbreaks
-- explicit linebreaks (two spaces at the line end)
+- explicit linebreaks
 - lists, including  
   __multi-line__ with    
   *formatting* and [links](http://www.example.com)
@@ -47,7 +86,9 @@ This renderer does support:
    1. nested lists
    2. and ordered lists
 
-This renderer does currently __not__ support:
+## Unsupported markdown features
+
+This renderer currently does __not__ (and likely never will) support:
 
 - horizontal rules
 - code
