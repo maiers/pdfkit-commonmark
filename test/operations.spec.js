@@ -24,8 +24,18 @@ describe('intermediate "operations" format', () => {
                         expect(instance.operations(parsed)).to.deep.eql(
                             [
                                 {
-                                    text: c[1],
-                                    continued: false
+                                    "continued": false,
+                                    "fillColor": "black",
+                                    "fillOpacity": 1,
+                                    "font": "default",
+                                    "fontSize": 12,
+                                    "listDepth": 0,
+                                    "strokeColor": "black",
+                                    "strokeOpacity": 1,
+                                    "text": c[1]
+                                },
+                                {
+                                    "moveDown": true
                                 }
                             ]
                         );
@@ -53,8 +63,18 @@ describe('intermediate "operations" format', () => {
                         expect(instance.operations(parsed)).to.deep.eql(
                             [
                                 {
-                                    text: c[1],
-                                    continued: false
+                                    "continued": false,
+                                    "fillColor": "black",
+                                    "fillOpacity": 1,
+                                    "font": "default",
+                                    "fontSize": 12,
+                                    "listDepth": 0,
+                                    "strokeColor": "black",
+                                    "strokeOpacity": 1,
+                                    "text": c[1]
+                                },
+                                {
+                                    "moveDown": true
                                 }
                             ]
                         );
@@ -77,15 +97,26 @@ describe('intermediate "operations" format', () => {
                     expect(instance.operations(parsed)).to.deep.eql(
                         [
                             {
-                                text: 'This is a line',
-                                continued: false
+                                "continued": false,
+                                "fillColor": "black",
+                                "fillOpacity": 1,
+                                "font": "default",
+                                "fontSize": 12,
+                                "listDepth": 0,
+                                "strokeColor": "black",
+                                "strokeOpacity": 1,
+                                "text": "This is a line"
                             },
                             {
-                                moveUp: true
+                                "continued": true,
+                                "text": "\n"
                             },
                             {
-                                text: '\nbreak with only one newline.',
-                                continued: false
+                                "continued": false,
+                                "text": "break with only one newline."
+                            },
+                            {
+                                "moveDown": true
                             }
                         ]
                     );
@@ -102,12 +133,26 @@ describe('intermediate "operations" format', () => {
                     expect(instance.operations(parsed)).to.deep.eql(
                         [
                             {
-                                text: 'This is a line ',
-                                continued: true
+                                "continued": true,
+                                "fillColor": "black",
+                                "fillOpacity": 1,
+                                "font": "default",
+                                "fontSize": 12,
+                                "listDepth": 0,
+                                "strokeColor": "black",
+                                "strokeOpacity": 1,
+                                "text": "This is a line"
                             },
                             {
-                                text: 'break that will be ignored.',
-                                continued: false
+                                "continued": true,
+                                "text": " "
+                            },
+                            {
+                                "continued": false,
+                                "text": "break that will be ignored."
+                            },
+                            {
+                                "moveDown": true
                             }
                         ]
                     );
@@ -118,19 +163,26 @@ describe('intermediate "operations" format', () => {
 
         });
 
-        describe('greater-than char (>)', function () {
+        describe('escaped greater-than char (>)', function () {
 
             it('as only character', function () {
 
-                const parsed = reader.parse('>');
+                const parsed = reader.parse('\\>');
                 expect(instance.operations(parsed)).to.deep.eql(
                     [
                         {
-                            text: '>',
-                            continued: false
+                            "continued": false,
+                            "fillColor": "black",
+                            "fillOpacity": 1,
+                            "font": "default",
+                            "fontSize": 12,
+                            "listDepth": 0,
+                            "strokeColor": "black",
+                            "strokeOpacity": 1,
+                            "text": ">"
                         },
                         {
-                            moveDown: true
+                            "moveDown": true
                         }
                     ]
                 );
@@ -150,14 +202,23 @@ describe('intermediate "operations" format', () => {
             expect(instance.operations(parsed)).to.deep.eql(
                 [
                     {
-                        font: 'italic'
+                        "fillColor": "black",
+                        "fillOpacity": 1,
+                        "font": "italic",
+                        "fontSize": 12,
+                        "listDepth": 0,
+                        "strokeColor": "black",
+                        "strokeOpacity": 1
                     },
                     {
-                        text: 'emp',
-                        continued: false
+                        "continued": false,
+                        "text": "emp"
                     },
                     {
                         font: 'default'
+                    },
+                    {
+                        "moveDown": true
                     }
                 ]
             );
@@ -171,14 +232,23 @@ describe('intermediate "operations" format', () => {
             expect(instance.operations(parsed)).to.deep.eql(
                 [
                     {
-                        font: 'italic'
+                        "fillColor": "black",
+                        "fillOpacity": 1,
+                        "font": "italic",
+                        "fontSize": 12,
+                        "listDepth": 0,
+                        "strokeColor": "black",
+                        "strokeOpacity": 1
                     },
                     {
-                        text: 'emp',
-                        continued: false
+                        "continued": false,
+                        "text": "emp"
                     },
                     {
                         font: 'default'
+                    },
+                    {
+                        "moveDown": true
                     }
                 ]
             );
@@ -192,14 +262,29 @@ describe('intermediate "operations" format', () => {
             expect(instance.operations(parsed)).to.deep.eql(
                 [
                     {
+                        "fillColor": "black",
+                        "fillOpacity": 1,
+                        "font": "italic",
+                        "fontSize": 12,
+                        "listDepth": 0,
+                        "strokeColor": "black",
+                        "strokeOpacity": 1
+                    },
+                    {
                         font: 'bold-italic'
                     },
                     {
-                        text: 'strongemp',
-                        continued: false
+                        "continued": false,
+                        "text": "strongemp"
+                    },
+                    {
+                        font: 'italic'
                     },
                     {
                         font: 'default'
+                    },
+                    {
+                        "moveDown": true
                     }
                 ]
             );
@@ -213,8 +298,15 @@ describe('intermediate "operations" format', () => {
             expect(instance.operations(parsed)).to.deep.eql(
                 [
                     {
-                        text: 'This is ',
-                        continued: true
+                        "continued": true,
+                        "fillColor": "black",
+                        "fillOpacity": 1,
+                        "font": "default",
+                        "fontSize": 12,
+                        "listDepth": 0,
+                        "strokeColor": "black",
+                        "strokeOpacity": 1,
+                        text: 'This is '
                     },
                     {
                         font: 'italic'
@@ -243,6 +335,9 @@ describe('intermediate "operations" format', () => {
                     {
                         text: ' word.',
                         continued: false
+                    },
+                    {
+                        moveDown: true
                     }
                 ]
             );
@@ -260,14 +355,23 @@ describe('intermediate "operations" format', () => {
             expect(instance.operations(parsed)).to.deep.eql(
                 [
                     {
-                        font: 'bold'
+                        "fillColor": "black",
+                        "fillOpacity": 1,
+                        "font": "bold",
+                        "fontSize": 12,
+                        "listDepth": 0,
+                        "strokeColor": "black",
+                        "strokeOpacity": 1
                     },
                     {
-                        text: 'strong',
-                        continued: false
+                        "continued": false,
+                        "text": "strong"
                     },
                     {
-                        font: 'default'
+                        "font": "default"
+                    },
+                    {
+                        "moveDown": true
                     }
                 ]
             );
@@ -281,14 +385,23 @@ describe('intermediate "operations" format', () => {
             expect(instance.operations(parsed)).to.deep.eql(
                 [
                     {
-                        font: 'bold'
+                        "fillColor": "black",
+                        "fillOpacity": 1,
+                        "font": "bold",
+                        "fontSize": 12,
+                        "listDepth": 0,
+                        "strokeColor": "black",
+                        "strokeOpacity": 1
                     },
                     {
-                        text: 'strong',
-                        continued: false
+                        "continued": false,
+                        "text": "strong"
                     },
                     {
-                        font: 'default'
+                        "font": "default"
+                    },
+                    {
+                        "moveDown": true
                     }
                 ]
             );
@@ -306,17 +419,25 @@ describe('intermediate "operations" format', () => {
             expect(instance.operations(parsed)).to.deep.eql(
                 [
                     {
-                        save: true,
-                        fillColor: 'blue',
+                        "fillColor": "blue",
+                        "fillOpacity": 1,
+                        "font": "default",
+                        "fontSize": 12,
+                        "listDepth": 0,
+                        "strokeColor": "black",
+                        "strokeOpacity": 1
                     },
                     {
-                        link: 'link',
-                        underline: true,
-                        text: 'text',
-                        continued: false,
+                        "continued": false,
+                        "link": "link",
+                        "text": "text",
+                        "underline": true
                     },
                     {
-                        restore: true
+                        "fillColor": "black"
+                    },
+                    {
+                        "moveDown": true
                     }
                 ]
             );
@@ -330,25 +451,34 @@ describe('intermediate "operations" format', () => {
             expect(instance.operations(parsed)).to.deep.eql(
                 [
                     {
-                        text: 'A ',
-                        continued: true
+                        "continued": true,
+                        "fillColor": "black",
+                        "fillOpacity": 1,
+                        "font": "default",
+                        "fontSize": 12,
+                        "listDepth": 0,
+                        "strokeColor": "black",
+                        "strokeOpacity": 1,
+                        "text": "A "
                     },
                     {
-                        save: true,
-                        fillColor: 'blue'
+                        "fillColor": "blue"
                     },
                     {
-                        text: 'link',
-                        link: 'href',
-                        underline: true,
-                        continued: true
+                        "continued": true,
+                        "link": "href",
+                        "text": "link",
+                        "underline": true
                     },
                     {
-                        restore: true
+                        "fillColor": "black"
                     },
                     {
-                        text: ' within some text.',
-                        continued: false
+                        "continued": false,
+                        "text": " within some text."
+                    },
+                    {
+                        "moveDown": true
                     }
                 ]
             );
@@ -362,25 +492,34 @@ describe('intermediate "operations" format', () => {
             expect(instance.operations(parsed)).to.deep.eql(
                 [
                     {
-                        text: 'This is ',
-                        continued: true
+                        "continued": true,
+                        "fillColor": "black",
+                        "fillOpacity": 1,
+                        "font": "default",
+                        "fontSize": 12,
+                        "listDepth": 0,
+                        "strokeColor": "black",
+                        "strokeOpacity": 1,
+                        "text": "This is "
                     },
                     {
-                        save: true,
-                        fillColor: 'blue'
+                        "fillColor": "blue"
                     },
                     {
-                        text: 'a link',
-                        link: 'https://www.example.com',
-                        underline: true,
-                        continued: true
+                        "continued": true,
+                        "link": "https://www.example.com",
+                        "text": "a link",
+                        "underline": true
                     },
                     {
-                        restore: true
+                        "fillColor": "black"
                     },
                     {
-                        text: ' within some text.',
-                        continued: false
+                        "continued": false,
+                        "text": " within some text."
+                    },
+                    {
+                        "moveDown": true
                     }
                 ]
             );
@@ -394,23 +533,31 @@ describe('intermediate "operations" format', () => {
             expect(instance.operations(parsed)).to.deep.eql(
                 [
                     {
-                        font: 'italic'
+                        "fillColor": "black",
+                        "fillOpacity": 1,
+                        "font": "italic",
+                        "fontSize": 12,
+                        "listDepth": 0,
+                        "strokeColor": "black",
+                        "strokeOpacity": 1
                     },
                     {
-                        save: true,
-                        fillColor: 'blue'
+                        "fillColor": "blue"
                     },
                     {
-                        text: 'text',
-                        link: 'link',
-                        underline: true,
-                        continued: false
+                        "continued": false,
+                        "link": "link",
+                        "text": "text",
+                        "underline": true
                     },
                     {
-                        restore: true
+                        "fillColor": "black"
                     },
                     {
-                        font: 'default'
+                        "font": "default"
+                    },
+                    {
+                        "moveDown": true
                     }
                 ]
             );
@@ -424,35 +571,43 @@ describe('intermediate "operations" format', () => {
             expect(instance.operations(parsed)).to.deep.eql(
                 [
                     {
-                        save: true,
-                        fillColor: 'blue'
+                        "fillColor": "blue",
+                        "fillOpacity": 1,
+                        "font": "default",
+                        "fontSize": 12,
+                        "listDepth": 0,
+                        "strokeColor": "black",
+                        "strokeOpacity": 1
                     },
                     {
-                        text: 'text with some ',
-                        link: 'link',
-                        underline: true,
-                        continued: true
+                        "continued": true,
+                        "link": "link",
+                        "text": "text with some ",
+                        "underline": true
                     },
                     {
-                        font: 'italic'
+                        "font": "italic"
                     },
                     {
-                        text: 'of it',
-                        continued: true,
-                        link: 'link',
-                        underline: true
+                        "continued": true,
+                        "link": "link",
+                        "text": "of it",
+                        "underline": true
                     },
                     {
-                        font: 'default'
+                        "font": "default"
                     },
                     {
-                        text: ' emphasized',
-                        continued: false,
-                        link: 'link',
-                        underline: true
+                        "continued": false,
+                        "link": "link",
+                        "text": " emphasized",
+                        "underline": true
                     },
                     {
-                        restore: true
+                        "fillColor": "black"
+                    },
+                    {
+                        "moveDown": true
                     }
                 ]
             );
@@ -470,12 +625,26 @@ describe('intermediate "operations" format', () => {
             expect(instance.operations(parsed)).to.deep.eql(
                 [
                     {
-                        text: 'This is the part with a missing whitespace ',
-                        continued: true
+                        "continued": true,
+                        "fillColor": "black",
+                        "fillOpacity": 1,
+                        "font": "default",
+                        "fontSize": 12,
+                        "listDepth": 0,
+                        "strokeColor": "black",
+                        "strokeOpacity": 1,
+                        "text": "This is the part with a missing whitespace"
                     },
                     {
-                        text: 'at the end.',
-                        continued: false
+                        continued: true,
+                        text: ' '
+                    },
+                    {
+                        "continued": false,
+                        "text": "at the end."
+                    },
+                    {
+                        "moveDown": true
                     }
                 ]
             );
@@ -489,51 +658,79 @@ describe('intermediate "operations" format', () => {
             expect(instance.operations(parsed)).to.deep.eql(
                 [
                     {
-                        text: 'This is the part with a missing whitespace ',
-                        continued: true
+                        "continued": true,
+                        "fillColor": "black",
+                        "fillOpacity": 1,
+                        "font": "default",
+                        "fontSize": 12,
+                        "listDepth": 0,
+                        "strokeColor": "black",
+                        "strokeOpacity": 1,
+                        "text": "This is the part with a missing whitespace"
                     },
                     {
-                        font: 'italic'
+                        continued: true,
+                        text: ' '
                     },
                     {
-                        text: 'at',
-                        continued: true
+                        "font": "italic"
                     },
                     {
-                        font: 'default'
+                        "continued": true,
+                        "text": "at"
                     },
                     {
-                        text: ' the end.',
-                        continued: false
+                        "font": "default"
+                    },
+                    {
+                        "continued": false,
+                        "text": " the end."
+                    },
+                    {
+                        "moveDown": true
                     }
                 ]
             );
 
         });
 
-        it('add missing whitespace before softbreak on an emphasize', () => {
+        it('add missing whitespace before softbreak after an emphasize', () => {
 
             const parsed = reader.parse('This is the part with the *emphasize*\nfollowed with a missing whitespace.');
 
             expect(instance.operations(parsed)).to.deep.eql(
                 [
                     {
-                        text: 'This is the part with the ',
-                        continued: true
+                        "continued": true,
+                        "fillColor": "black",
+                        "fillOpacity": 1,
+                        "font": "default",
+                        "fontSize": 12,
+                        "listDepth": 0,
+                        "strokeColor": "black",
+                        "strokeOpacity": 1,
+                        "text": "This is the part with the "
                     },
                     {
-                        font: 'italic'
+                        "font": "italic"
                     },
                     {
-                        text: 'emphasize ',
-                        continued: true
+                        "continued": true,
+                        "text": "emphasize"
                     },
                     {
-                        font: 'default'
+                        "font": "default"
                     },
                     {
-                        text: 'followed with a missing whitespace.',
-                        continued: false
+                        "continued": true,
+                        "text": " "
+                    },
+                    {
+                        "continued": false,
+                        "text": "followed with a missing whitespace."
+                    },
+                    {
+                        "moveDown": true
                     }
                 ]
             );
@@ -547,25 +744,38 @@ describe('intermediate "operations" format', () => {
             expect(instance.operations(parsed)).to.deep.eql(
                 [
                     {
-                        text: 'This is the part with the ',
-                        continued: true
+                        "continued": true,
+                        "fillColor": "black",
+                        "fillOpacity": 1,
+                        "font": "default",
+                        "fontSize": 12,
+                        "listDepth": 0,
+                        "strokeColor": "black",
+                        "strokeOpacity": 1,
+                        "text": "This is the part with the "
                     },
                     {
-                        fillColor: 'blue',
-                        save: true
+                        "fillColor": "blue"
                     },
                     {
-                        text: 'linkText',
-                        continued: true,
-                        link: 'linkHref',
-                        underline: true
+                        "continued": true,
+                        "link": "linkHref",
+                        "text": "linkText",
+                        "underline": true
                     },
                     {
-                        restore: true
+                        "fillColor": "black"
                     },
                     {
-                        text: ' followed with a missing whitespace.',
-                        continued: false
+                        "continued": true,
+                        "text": " "
+                    },
+                    {
+                        "continued": false,
+                        "text": "followed with a missing whitespace."
+                    },
+                    {
+                        "moveDown": true
                     }
                 ]
             );
@@ -579,29 +789,45 @@ describe('intermediate "operations" format', () => {
             expect(instance.operations(parsed)).to.deep.eql(
                 [
                     {
-                        text: 'This is the part with the ',
-                        continued: true
+                        "continued": true,
+                        "fillColor": "black",
+                        "fillOpacity": 1,
+                        "font": "default",
+                        "fontSize": 12,
+                        "listDepth": 0,
+                        "strokeColor": "black",
+                        "strokeOpacity": 1,
+                        "text": "This is the part with the "
                     },
                     {
-                        fillColor: 'blue',
-                        save: true
+                        "fillColor": "blue"
                     },
                     {
-                        text: 'linkText',
-                        continued: true,
-                        link: 'linkHref',
-                        underline: true
+                        "continued": true,
+                        "link": "linkHref",
+                        "text": "linkText",
+                        "underline": true
                     },
                     {
-                        restore: true
+                        "fillColor": "black"
                     },
                     {
-                        text: ' ',
-                        continued: true
+                        // apparently commonmark ignores the
+                        // whitespace between the link and
+                        // the softbreak?
+                        "continued": true,
+                        "text": ""
                     },
                     {
-                        text: 'followed with a missing whitespace.',
-                        continued: false
+                        "continued": true,
+                        "text": " "
+                    },
+                    {
+                        "continued": false,
+                        "text": "followed with a missing whitespace."
+                    },
+                    {
+                        "moveDown": true
                     }
                 ]
             );
@@ -619,15 +845,25 @@ describe('intermediate "operations" format', () => {
             expect(instance.operations(parsed)).to.deep.eql(
                 [
                     {
-                        text: 'Line one.',
-                        continued: false
+                        "continued": false,
+                        "fillColor": "black",
+                        "fillOpacity": 1,
+                        "font": "default",
+                        "fontSize": 12,
+                        "listDepth": 0,
+                        "strokeColor": "black",
+                        "strokeOpacity": 1,
+                        "text": "Line one."
                     },
                     {
-                        moveDown: true
+                        "moveDown": true
                     },
                     {
-                        text: 'Line two.',
-                        continued: false
+                        "continued": false,
+                        "text": "Line two."
+                    },
+                    {
+                        "moveDown": true
                     }
                 ]
             );
@@ -651,8 +887,28 @@ describe('intermediate "operations" format', () => {
                 expect(instance.operations(parsed)).to.deep.eql(
                     [
                         {
-                            list: [],
-                            listItemStyle: 'disc'
+                            "fillColor": "black",
+                            "fillOpacity": 1,
+                            "font": "default",
+                            "fontSize": 12,
+                            "list": true,
+                            "listDepth": 1,
+                            "listItemCount": 1,
+                            "listItemStyle": "disc",
+                            "strokeColor": "black",
+                            "strokeOpacity": 1
+                        },
+                        {
+                            "listItem": true,
+                            "listItemIndex": 0,
+                            listItemCount: 1,
+                            "listItemStyle": "disc"
+                        },
+                        {
+                            "listDepth": 0
+                        },
+                        {
+                            "moveDown": true
                         }
                     ]
                 );
@@ -669,17 +925,359 @@ describe('intermediate "operations" format', () => {
             expect(instance.operations(parsed)).to.deep.eql(
                 [
                     {
-                        listItemStyle: 'disc',
-                        list: [
-                            'Item 1',
-                            'Item 2'
-                        ]
+                        "fillColor": "black",
+                        "fillOpacity": 1,
+                        "font": "default",
+                        "fontSize": 12,
+                        "list": true,
+                        "listDepth": 1,
+                        "listItemCount": 2,
+                        "listItemStyle": "disc",
+                        "strokeColor": "black",
+                        "strokeOpacity": 1
+                    },
+                    {
+                        "listItem": true,
+                        "listItemIndex": 0,
+                        listItemCount: 2,
+                        "listItemStyle": "disc"
+                    },
+                    {
+                        "continued": false,
+                        "text": "Item 1"
+                    },
+                    {
+                        "listItem": true,
+                        "listItemIndex": 1,
+                        listItemCount: 2,
+                        "listItemStyle": "disc"
+                    },
+                    {
+                        "continued": false,
+                        "text": "Item 2"
+                    },
+                    {
+                        "listDepth": 0
+                    },
+                    {
+                        "moveDown": true
                     }
                 ]
             );
 
         });
 
+        describe('nested', () => {
+
+            it('both unordered', function () {
+
+                const parsed = reader.parse('- List 1, Item 1\n   - List 2, Item 1\n   - List 2, Item 2\n- List 1, Item 2');
+
+                expect(instance.operations(parsed)).to.deep.eql(
+                    [
+                        {
+                            "fillColor": "black",
+                            "fillOpacity": 1,
+                            "font": "default",
+                            "fontSize": 12,
+                            "list": true,
+                            "listDepth": 1,
+                            "listItemCount": 2,
+                            "listItemStyle": "disc",
+                            "strokeColor": "black",
+                            "strokeOpacity": 1
+                        },
+                        {
+                            "listItem": true,
+                            "listItemIndex": 0,
+                            listItemCount: 2,
+                            "listItemStyle": "disc"
+                        },
+                        {
+                            "continued": false,
+                            "text": "List 1, Item 1"
+                        },
+                        {
+                            "listDepth": 2,
+                            "listItemCount": 2,
+                            "listItemStyle": "disc"
+                        },
+                        {
+                            "listItem": true,
+                            "listItemIndex": 0,
+                            listItemCount: 2,
+                            "listItemStyle": "disc"
+                        },
+                        {
+                            "continued": false,
+                            "text": "List 2, Item 1"
+                        },
+                        {
+                            "listItem": true,
+                            "listItemIndex": 1,
+                            listItemCount: 2,
+                            "listItemStyle": "disc"
+                        },
+                        {
+                            "continued": false,
+                            "text": "List 2, Item 2"
+                        },
+                        {
+                            "listDepth": 1
+                        },
+                        {
+                            "listItem": true,
+                            "listItemIndex": 1,
+                            listItemCount: 2,
+                            "listItemStyle": "disc"
+                        },
+                        {
+                            "continued": false,
+                            "text": "List 1, Item 2"
+                        },
+                        {
+                            "listDepth": 0
+                        },
+                        {
+                            "moveDown": true
+                        }
+                    ]
+                );
+
+            });
+
+            it('inner ordered, outer unordered', function () {
+
+                const parsed = reader.parse('- List 1, Item 1\n   1. List 2, Item 1\n   2. List 2, Item 2\n- List 1, Item 2');
+
+                expect(instance.operations(parsed)).to.deep.eql(
+                    [
+                        {
+                            "fillColor": "black",
+                            "fillOpacity": 1,
+                            "font": "default",
+                            "fontSize": 12,
+                            "list": true,
+                            "listDepth": 1,
+                            "listItemCount": 2,
+                            "listItemStyle": "disc",
+                            "strokeColor": "black",
+                            "strokeOpacity": 1
+                        },
+                        {
+                            "listItem": true,
+                            "listItemIndex": 0,
+                            listItemCount: 2,
+                            "listItemStyle": "disc"
+                        },
+                        {
+                            "continued": false,
+                            "text": "List 1, Item 1"
+                        },
+                        {
+                            "listDepth": 2,
+                            "listItemCount": 2,
+                            "listItemStyle": "arabic"
+                        },
+                        {
+                            "listItem": true,
+                            "listItemIndex": 0,
+                            listItemCount: 2,
+                            "listItemStyle": "arabic"
+                        },
+                        {
+                            "continued": false,
+                            "text": "List 2, Item 1"
+                        },
+                        {
+                            "listItem": true,
+                            "listItemIndex": 1,
+                            listItemCount: 2,
+                            "listItemStyle": "arabic"
+                        },
+                        {
+                            "continued": false,
+                            "text": "List 2, Item 2"
+                        },
+                        {
+                            "listDepth": 1
+                        },
+                        {
+                            "listItem": true,
+                            "listItemIndex": 1,
+                            listItemCount: 2,
+                            "listItemStyle": "disc"
+                        },
+                        {
+                            "continued": false,
+                            "text": "List 1, Item 2"
+                        },
+                        {
+                            "listDepth": 0
+                        },
+                        {
+                            "moveDown": true
+                        }
+                    ]
+                );
+
+            });
+
+            it('outer ordered, inner unordered', function () {
+
+                const parsed = reader.parse('1. List 1, Item 1\n   - List 2, Item 1\n   - List 2, Item 2\n2. List 1, Item 2');
+
+                expect(instance.operations(parsed)).to.deep.eql(
+                    [
+                        {
+                            "fillColor": "black",
+                            "fillOpacity": 1,
+                            "font": "default",
+                            "fontSize": 12,
+                            "list": true,
+                            "listDepth": 1,
+                            "listItemCount": 2,
+                            "listItemStyle": "arabic",
+                            "strokeColor": "black",
+                            "strokeOpacity": 1
+                        },
+                        {
+                            "listItem": true,
+                            "listItemIndex": 0,
+                            listItemCount: 2,
+                            "listItemStyle": "arabic"
+                        },
+                        {
+                            "continued": false,
+                            "text": "List 1, Item 1"
+                        },
+                        {
+                            "listDepth": 2,
+                            "listItemCount": 2,
+                            "listItemStyle": "disc"
+                        },
+                        {
+                            "listItem": true,
+                            "listItemIndex": 0,
+                            listItemCount: 2,
+                            "listItemStyle": "disc"
+                        },
+                        {
+                            "continued": false,
+                            "text": "List 2, Item 1"
+                        },
+                        {
+                            "listItem": true,
+                            "listItemIndex": 1,
+                            listItemCount: 2,
+                            "listItemStyle": "disc"
+                        },
+                        {
+                            "continued": false,
+                            "text": "List 2, Item 2"
+                        },
+                        {
+                            "listDepth": 1
+                        },
+                        {
+                            "listItem": true,
+                            "listItemIndex": 1,
+                            listItemCount: 2,
+                            "listItemStyle": "arabic"
+                        },
+                        {
+                            "continued": false,
+                            "text": "List 1, Item 2"
+                        },
+                        {
+                            "listDepth": 0
+                        },
+                        {
+                            "moveDown": true
+                        }
+                    ]
+                );
+
+            });
+
+            it('both ordered', function () {
+
+                const parsed = reader.parse('1. List 1, Item 1\n   1. List 2, Item 1\n   2. List 2, Item 2\n2. List 1, Item 2');
+
+                expect(instance.operations(parsed)).to.deep.eql(
+                    [
+                        {
+                            "fillColor": "black",
+                            "fillOpacity": 1,
+                            "font": "default",
+                            "fontSize": 12,
+                            "list": true,
+                            "listDepth": 1,
+                            "listItemCount": 2,
+                            "listItemStyle": "arabic",
+                            "strokeColor": "black",
+                            "strokeOpacity": 1
+                        },
+                        {
+                            "listItem": true,
+                            "listItemIndex": 0,
+                            listItemCount: 2,
+                            "listItemStyle": "arabic"
+                        },
+                        {
+                            "continued": false,
+                            "text": "List 1, Item 1"
+                        },
+                        {
+                            "listDepth": 2,
+                            "listItemCount": 2,
+                            "listItemStyle": "arabic"
+                        },
+                        {
+                            "listItem": true,
+                            "listItemIndex": 0,
+                            listItemCount: 2,
+                            "listItemStyle": "arabic"
+                        },
+                        {
+                            "continued": false,
+                            "text": "List 2, Item 1"
+                        },
+                        {
+                            "listItem": true,
+                            "listItemIndex": 1,
+                            listItemCount: 2,
+                            "listItemStyle": "arabic"
+                        },
+                        {
+                            "continued": false,
+                            "text": "List 2, Item 2"
+                        },
+                        {
+                            "listDepth": 1
+                        },
+                        {
+                            "listItem": true,
+                            "listItemIndex": 1,
+                            listItemCount: 2,
+                            "listItemStyle": "arabic"
+                        },
+                        {
+                            "continued": false,
+                            "text": "List 1, Item 2"
+                        },
+                        {
+                            "listDepth": 0
+                        },
+                        {
+                            "moveDown": true
+                        }
+                    ]
+                );
+
+            });
+
+        });
 
     });
 
@@ -692,16 +1290,116 @@ describe('intermediate "operations" format', () => {
             expect(instance.operations(parsed)).to.deep.eql(
                 [
                     {
-                        font: 'heading-bold',
-                        fontSize: 12 * 1.4
+                        "fillColor": "black",
+                        "fillOpacity": 1,
+                        "font": "heading-bold",
+                        "fontSize": 16.799999999999997,
+                        "listDepth": 0,
+                        "strokeColor": "black",
+                        "strokeOpacity": 1
                     },
                     {
-                        text: 'Headline',
-                        continued: false
+                        "continued": false,
+                        "text": "Headline"
                     },
                     {
-                        font: 'default',
-                        fontSize: 12
+                        "font": "default",
+                        "fontSize": 12
+                    },
+                    {
+                        "moveDown": true
+                    }
+                ]
+            );
+
+        });
+
+        it('level 2', () => {
+
+            const parsed = reader.parse('## Headline');
+
+            expect(instance.operations(parsed)).to.deep.eql(
+                [
+                    {
+                        "fillColor": "black",
+                        "fillOpacity": 1,
+                        "font": "heading-bold",
+                        "fontSize": 14.399999999999999,
+                        "listDepth": 0,
+                        "strokeColor": "black",
+                        "strokeOpacity": 1
+                    },
+                    {
+                        "continued": false,
+                        "text": "Headline"
+                    },
+                    {
+                        "font": "default",
+                        "fontSize": 12
+                    },
+                    {
+                        "moveDown": true
+                    }
+                ]
+            );
+
+        });
+
+        it('level 3', () => {
+
+            const parsed = reader.parse('### Headline');
+
+            expect(instance.operations(parsed)).to.deep.eql(
+                [
+                    {
+                        "fillColor": "black",
+                        "fillOpacity": 1,
+                        "font": "heading-default",
+                        "fontSize": 14.399999999999999,
+                        "listDepth": 0,
+                        "strokeColor": "black",
+                        "strokeOpacity": 1
+                    },
+                    {
+                        "continued": false,
+                        "text": "Headline"
+                    },
+                    {
+                        "font": "default",
+                        "fontSize": 12
+                    },
+                    {
+                        "moveDown": true
+                    }
+                ]
+            );
+
+        });
+
+        it('level 4', () => {
+
+            const parsed = reader.parse('#### Headline');
+
+            expect(instance.operations(parsed)).to.deep.eql(
+                [
+                    {
+                        "fillColor": "black",
+                        "fillOpacity": 1,
+                        "font": "heading-bold",
+                        "fontSize": 12,
+                        "listDepth": 0,
+                        "strokeColor": "black",
+                        "strokeOpacity": 1
+                    },
+                    {
+                        "continued": false,
+                        "text": "Headline"
+                    },
+                    {
+                        "font": "default"
+                    },
+                    {
+                        "moveDown": true
                     }
                 ]
             );

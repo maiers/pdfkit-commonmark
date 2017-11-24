@@ -9,7 +9,7 @@ import * as TestUtils from './test-utils';
 describe('dimensionsOfMarkdown', function () {
 
     const reader = new commonmark.Parser();
-    const writer = new CommonmarkPDFRenderer();
+    const writer = new CommonmarkPDFRenderer({debug: true});
 
     describe('for a single paragraph markdown', function () {
 
@@ -39,11 +39,11 @@ describe('dimensionsOfMarkdown', function () {
             doc.end();
 
             it('is equal to the rendered height', function () {
-                expect(calculatedDimensions.h).to.be.eql(renderedDimensions.h);
+                expect(calculatedDimensions.h).to.be.closeTo(renderedDimensions.h, .001);
             });
 
             it('returns same height from heightOfMarkdown', function () {
-                expect(writer.heightOfMarkdown(doc, parsed, {})).to.be.eql(calculatedDimensions.h);
+                expect(writer.heightOfMarkdown(doc, parsed, {})).to.be.closeTo(calculatedDimensions.h, .001);
             });
 
         });
@@ -52,7 +52,9 @@ describe('dimensionsOfMarkdown', function () {
 
             const doc = new PDFDocument();
 
-            doc.pipe(fs.createWriteStream(TestUtils.outputFilePath(this)));
+            const outputFilePath = TestUtils.outputFilePath(this);
+            console.log('_', outputFilePath);
+            doc.pipe(fs.createWriteStream(outputFilePath));
 
             const pdfkitOptions = {width: 80};
 
@@ -67,14 +69,15 @@ describe('dimensionsOfMarkdown', function () {
 
             doc.rect(renderedDimensions.x, renderedDimensions.y, renderedDimensions.w, renderedDimensions.h)
                 .save()
-                .stroke('ccc')
+                .strokeOpacity(.1)
+                .stroke('eee')
                 .restore();
 
             doc.end();
 
             it('is equal to the rendered height', function () {
                 // TODO: Improve precision of this text
-                expect(calculatedDimensions.h).to.be.closeTo(renderedDimensions.h, .001);
+                expect(Math.round(calculatedDimensions.h)).to.be.eql(Math.round(renderedDimensions.h));
             });
 
         });
@@ -114,9 +117,42 @@ describe('dimensionsOfMarkdown', function () {
 
     });
 
+    describe('for linebreaks', function () {
+
+        const markdown = 'This is *emphasized*.  \nAnd another  \n**strong** paragraph.';
+        const parsed = reader.parse(markdown);
+
+        it('is equal to the rendered height', function () {
+
+            const doc = new PDFDocument();
+
+            doc.pipe(fs.createWriteStream(TestUtils.outputFilePath(this)));
+
+            const calculatedDimensions = writer.dimensionsOfMarkdown(doc, parsed, {});
+
+            doc.rect(calculatedDimensions.x, calculatedDimensions.y, calculatedDimensions.w, calculatedDimensions.h)
+                .save()
+                .fill('lightgreen')
+                .restore();
+
+            const renderedDimensions = writer.render(doc, parsed, {});
+
+            doc.rect(renderedDimensions.x, renderedDimensions.y, renderedDimensions.w, renderedDimensions.h)
+                .save()
+                .stroke('ccc')
+                .restore();
+
+            doc.end();
+
+            expect(calculatedDimensions.h).to.be.closeTo(renderedDimensions.h, .001);
+
+        });
+
+    });
+
     describe('for lists', function () {
 
-        const markdown = 'This is an introduction sentence:\n\n- And one\m- Two\n- Three list items';
+        const markdown = 'This is an introduction sentence:\n\n- And one\n- Two\n- Three list items';
         const parsed = reader.parse(markdown);
 
         it('is equal to the rendered height', function () {

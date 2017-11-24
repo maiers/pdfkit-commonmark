@@ -31,36 +31,32 @@ following command after installing npm.
 
 ## Known limitations
 
-This renderer does currently _partially_ (hey, this is an 0.x version) support:
+This renderer does support:
 
 - paragraphs
-- softbreaks
-- explicit linebreaks
 - headers
-- links
+- emphasize
 - strong
-- emph
-- flat lists without formatting
+- links
+- softbreaks
+- explicit linebreaks (two spaces at the line end)
+- lists, including  
+  __multi-line__ with    
+  *formatting* and [links](http://www.example.com)
+- and last but not least
+   1. nested lists
+   2. and ordered lists
 
-This renderer does currently __not__ support (order by priority):
+This renderer does currently __not__ support:
 
-- lists with formatting
-- nested lists
+- horizontal rules
 - code
 - block quotes
-- image
+- images
 - html
 - tables
 
 Pull requests are welcome.
-
-## Known issues
-
-For whatever reason, the text color switches to blue on the 
-second page for the REAME.pdf. I assume that's the color from 
-the link highlighting. But why this happens is pretty unclear.
-
-There are some issues with missing whitespaces on linebreaks. 
 
 ## Usage
 
@@ -68,9 +64,9 @@ There are some issues with missing whitespaces on linebreaks.
 
     pdfkit-commonmark <inputFile> [<outputFile>]
 
-As code is currently not supported by this renderer, this
-part of the documentation is pretty empty in the pdf. Check
-the README.md for code examples.
+_Code will not be rendered in the PDF. Check the 
+[README.md](https://github.com/maiers/pdfkit-commonmark/blob/master/README.md) 
+for the code examples._
     
 ### Code
 
@@ -98,9 +94,9 @@ the README.md for code examples.
     // end the document
     doc.end();
     
-As code is currently not supported by this renderer, this
-part of the documentation is pretty empty in the pdf. Check
-the README.md for code examples.
+_Code will not be rendered in the PDF. Check the 
+[README.md](https://github.com/maiers/pdfkit-commonmark/blob/master/README.md) 
+for the code examples._
 
 ## Dependencies
 
