@@ -6,8 +6,10 @@ export const forHeadingLevel = (level) => {
             return 'heading-bold';
         case 3:
             return 'heading-default';
-        default:
+        case 4:
             return 'heading-bold';
+        default:
+            return 'heading-default';
     }
 };
 
