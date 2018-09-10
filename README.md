@@ -113,6 +113,7 @@ for the code examples._
 
     import commonmark from 'commonmark';
     import CommonmarkPDFRenderer from 'pdfkit-commonmark';
+    import PDFDocument from 'pdfkit';
     
     // get parser instance
     const reader = new commonmark.Parser();
