@@ -154,7 +154,7 @@ class CommonmarkPDFKitRenderer {
         stack.push({
             font: 'default',
             fontSize: this.options.fontSize || 12,
-            fillColor: 'black',
+            fillColor: this.options.fillColor || 'black',
             strokeColor: 'black',
             fillOpacity: 1,
             strokeOpacity: 1,
