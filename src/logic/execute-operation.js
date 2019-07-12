@@ -79,8 +79,7 @@ export default (operation, doc, options) => {
     }
 
     if (operation.hasOwnProperty('text')) {
-        // the space on empty/missing text is required, as pdfkit
-        // would otherwise ignore the command
+        
         const textOptions = Object.assign({}, options.pdfkit, {
             continued: operation.continued,
             // requires false, to stop the link: https://github.com/devongovett/pdfkit/issues/464
@@ -95,7 +94,10 @@ export default (operation, doc, options) => {
             }
         }
 
+        // the space on empty/missing text is required, as pdfkit
+        // would otherwise ignore the command
         doc.text(operation.text || ' ', textOptions);
+        
     }
 
 };
