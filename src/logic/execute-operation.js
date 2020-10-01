@@ -83,7 +83,10 @@ export default (operation, doc, options) => {
         const textOptions = Object.assign({}, options.pdfkit, {
             continued: operation.continued,
             // requires false, to stop the link: https://github.com/devongovett/pdfkit/issues/464
-            link: operation.link || false,
+            // this was changed (seemingly before) 0.8.3 to require null instead of false ...
+            // anyway, this now works wit 0.8.3 + 0.11.0,
+            // using `false` did not work with 0.11.0
+            link: operation.link || null,
             underline: operation.underline || false
         });
 
