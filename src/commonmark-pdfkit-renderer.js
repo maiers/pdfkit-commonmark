@@ -101,7 +101,7 @@ class CommonmarkPDFKitRenderer {
             find(property) {
                 for (let i = this.stack.length - 1; i >= 0; i--) {
                     const f = this.stack[i];
-                    if (f.hasOwnProperty(property)) {
+                    if (Object.prototype.hasOwnProperty.call(f, property)) {
                         return f;
                     }
                 }
@@ -181,7 +181,7 @@ class CommonmarkPDFKitRenderer {
         const lastOperationWith = (property) => {
             for (let i = operations.length - 1; i >= 0; i--) {
                 const operation = operations[i];
-                if (operation.hasOwnProperty(property)) {
+                if (Object.prototype.hasOwnProperty.call(operation, property)) {
                     return operation;
                 }
             }
@@ -452,14 +452,14 @@ class CommonmarkPDFKitRenderer {
             //console.log('_operation____', JSON.stringify(operation));
 
             const PROPERTY_RULES = {
-                continued: (current) => current.hasOwnProperty('text'),
-                link: (current) => current.hasOwnProperty('text'),
-                underline: (current) => current.hasOwnProperty('text'),
+                continued: (current) => Object.prototype.hasOwnProperty.call(current, 'text'),
+                link: (current) => Object.prototype.hasOwnProperty.call(current, 'text'),
+                underline: (current) => Object.prototype.hasOwnProperty.call(current, 'text'),
                 font: (current, previous) => {
                     const hasChanged = current.font !== previous.font;
                     return (
                         // include on text operation if changed
-                        (current.hasOwnProperty('text') && hasChanged)
+                        (Object.prototype.hasOwnProperty.call(current, 'text') && hasChanged)
                         // include on non-text operation if changed
                         || hasChanged
                     );
@@ -483,13 +483,13 @@ class CommonmarkPDFKitRenderer {
                 const properties = Object.keys(operation);
                 const propertiesToKeep = properties.filter(property => {
 
-                    const keepAccordingToPropertyRules = PROPERTY_RULES.hasOwnProperty(property)
+                    const keepAccordingToPropertyRules = Object.prototype.hasOwnProperty.call(PROPERTY_RULES, property)
                         && PROPERTY_RULES[property](operation, previousState);
 
                     return propertiesToKeepEvenIfRedundant.includes(property)
                         || keepAccordingToPropertyRules
                         || (
-                            !PROPERTY_RULES.hasOwnProperty(property)
+                            !Object.prototype.hasOwnProperty.call(PROPERTY_RULES, property)
                             && operation[property] !== previousState[property]
                         );
                 });
@@ -599,7 +599,7 @@ class CommonmarkPDFKitRenderer {
                 if (!op.continued) {
 
                     const textOptions = Object.assign({}, pdfkitOptions);
-                    if (pdfkitOptions && pdfkitOptions.hasOwnProperty('width')) {
+                    if (pdfkitOptions && Object.prototype.hasOwnProperty.call(pdfkitOptions, 'width')) {
                         textOptions.width = pdfkitOptions.width - indent;
                     }
 

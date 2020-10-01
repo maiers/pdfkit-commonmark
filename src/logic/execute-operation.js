@@ -78,7 +78,7 @@ export default (operation, doc, options) => {
         doc.x = doc.page.margins.left + (operation.listDepth * indent);
     }
 
-    if (operation.hasOwnProperty('text')) {
+    if (Object.prototype.hasOwnProperty.call(operation, 'text')) {
         
         const textOptions = Object.assign({}, options.pdfkit, {
             continued: operation.continued,
@@ -87,7 +87,7 @@ export default (operation, doc, options) => {
             underline: operation.underline || false
         });
 
-        if ((options.pdfkit || {}).hasOwnProperty('width')) {
+        if (Object.prototype.hasOwnProperty.call(options.pdfkit || {}, 'width')) {
             const indent = doc.x - doc.page.margins.left;
             if (indent > 0) {
                 textOptions.width -= indent;
