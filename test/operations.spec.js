@@ -1,11 +1,11 @@
 import {expect} from 'chai';
-import commonmark from 'commonmark';
+import { Parser } from 'commonmark';
 import CommonmarkPDFRenderer from '../src/commonmark-pdfkit-renderer';
 
 describe('intermediate "operations" format', () => {
 
     const instance = new CommonmarkPDFRenderer({debug: true});
-    const reader = new commonmark.Parser();
+    const reader = new Parser();
 
     describe('special markdown', function () {
 

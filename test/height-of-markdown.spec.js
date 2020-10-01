@@ -2,13 +2,13 @@ import {describe, it} from 'mocha';
 import {expect} from 'chai';
 import fs from 'fs';
 import PDFDocument from 'pdfkit';
-import commonmark from 'commonmark';
+import { Parser } from 'commonmark';
 import CommonmarkPDFRenderer from '../src/commonmark-pdfkit-renderer';
 import * as TestUtils from './test-utils';
 
 describe('dimensionsOfMarkdown', function () {
 
-    const reader = new commonmark.Parser();
+    const reader = new Parser();
     const writer = new CommonmarkPDFRenderer({debug: true});
 
     describe('for a single paragraph markdown', function () {

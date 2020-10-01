@@ -4,7 +4,7 @@ import path from 'path';
 import chai, {expect} from 'chai';
 import chaiFS from 'chai-fs';
 import PDFDocument from 'pdfkit';
-import commonmark from 'commonmark';
+import { Parser } from 'commonmark';
 import CommonmarkPDFRenderer from '../src/commonmark-pdfkit-renderer';
 import * as TestUtils from './test-utils';
 
@@ -16,7 +16,7 @@ describe('final pdf render', function () {
     const instance = new CommonmarkPDFRenderer({
         debug: true
     });
-    const reader = new commonmark.Parser();
+    const reader = new Parser();
 
     it('simple', function () {
 

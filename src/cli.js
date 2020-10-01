@@ -3,7 +3,7 @@
 import fs from 'fs';
 import path from 'path';
 import PDFDocument from 'pdfkit';
-import commonmark from 'commonmark';
+import { Parser } from 'commonmark';
 import CommonmarkPDFRenderer from './commonmark-pdfkit-renderer';
 
 // get input file info
@@ -32,7 +32,7 @@ try {
 }
 
 // get parser instance
-const reader = new commonmark.Parser();
+const reader = new Parser();
 
 // parse input
 try {

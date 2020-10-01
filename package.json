@@ -33,7 +33,7 @@
   "author": "Sebastian <sebastian@comci.de>",
   "license": "MIT",
   "peerDependencies": {
-    "commonmark": "^0.28.1",
+    "commonmark": "^0.29.2",
     "pdfkit": "^0.8.3"
   },
   "devDependencies": {
@@ -46,7 +46,7 @@
     "babel-watch": "^2.0.7",
     "chai": "^4.2.0",
     "chai-fs": "^2.0.0",
-    "commonmark": "^0.28.1",
+    "commonmark": "^0.29.2",
     "eslint": "^7.10.0",
     "eslint-plugin-async-await": "0.0.0",
     "mocha": "^8.1.3",
