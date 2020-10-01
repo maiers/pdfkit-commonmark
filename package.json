@@ -17,7 +17,7 @@
   "scripts": {
     "clean": "rm -rf dist/",
     "build": "babel --out-dir dist/ src/",
-    "test": "mocha --require babel-core/register --recursive test/",
+    "test": "mocha --require @babel/register --recursive test/",
     "test:coverage": "nyc --reporter=html --reporter=text npm run test",
     "lint": "eslint src/",
     "lint:fix": "eslint --fix src/",
@@ -37,13 +37,10 @@
     "pdfkit": "^0.8.3"
   },
   "devDependencies": {
-    "babel-cli": "^6.26.0",
-    "babel-plugin-transform-async-functions": "^6.22.0",
-    "babel-plugin-transform-class-properties": "^6.24.1",
-    "babel-plugin-transform-regenerator": "^6.26.0",
-    "babel-plugin-transform-runtime": "^6.23.0",
-    "babel-preset-airbnb": "^2.4.0",
-    "babel-watch": "^2.0.7",
+    "@babel/cli": "^7.11.6",
+    "@babel/preset-env": "^7.11.5",
+    "@babel/register": "^7.11.5",
+    "babel-watch": "^7.0.0",
     "chai": "^4.2.0",
     "chai-fs": "^2.0.0",
     "commonmark": "^0.29.2",
