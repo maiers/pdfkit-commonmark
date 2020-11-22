@@ -430,11 +430,11 @@ class CommonmarkPDFKitRenderer {
                     break;
                 }
                 case 'thematic_break': {
-                    // unsupported
                     if (event.entering) {
                         operations.push({
-                            horizontalLine: true
+                            horizontalLine: true,
                         });
+                        moveDown();
                     }
                     break;
                 }
@@ -468,6 +468,7 @@ class CommonmarkPDFKitRenderer {
                     return previous.fontSize !== current.fontSize;
                 },
                 moveDown: () => true, // keep always
+                horizontalLine: () => true, // keep always
                 listItemStyle: (current) => current.listItem === true || current.list === true,
                 listItem: () => true, // keep always
                 listItemIndex: (current) => current.listItem === true,

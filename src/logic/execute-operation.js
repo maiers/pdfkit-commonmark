@@ -34,6 +34,12 @@ export default (operation, doc, options) => {
         doc.fillColor(operation.fillColor);
     }
 
+    if (operation.horizontalLine) {
+        doc.moveTo(doc.page.margins.left, doc.y)
+            .lineTo(doc.page.width - doc.page.margins.right, doc.y)
+            .stroke('#999999');
+    }
+
     if (operation.listItem) {
 
         const textHeight = doc.heightOfString('The quick brown fox jumps over the lazy dog');

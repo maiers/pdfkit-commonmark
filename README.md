@@ -69,6 +69,10 @@ dignissim qui blandit praesent
 luptatum zzril delenit augue duis  
 dolore te feugait nulla facilisi.
 
+### Horizontal rules
+
+---
+
 ### Lists
 
 - paragraphs
@@ -79,6 +83,7 @@ dolore te feugait nulla facilisi.
    3. links
 - softbreaks
 - explicit linebreaks
+- horizontal rules
 - lists, including  
   __multi-line__ with    
   *formatting* and [links](http://www.example.com)
@@ -90,7 +95,6 @@ dolore te feugait nulla facilisi.
 
 This renderer currently does __not__ (and likely never will) support:
 
-- horizontal rules
 - code
 - block quotes
 - images
