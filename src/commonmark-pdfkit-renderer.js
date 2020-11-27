@@ -234,9 +234,11 @@ class CommonmarkPDFKitRenderer {
                         // check if previous texts ends on whitespace
                         if (previousText && !/ $/.test(previousText.text)) {
                             // if not, add an additional whitespace operation
+                            const softbreak = this.options.softbreak;
+                            const continued = softbreak === '\n' ? false : true;
                             operations.push({
-                                text: ' ',
-                                continued: true
+                                text: softbreak,
+                                continued,
                             });
                         }
                     }
