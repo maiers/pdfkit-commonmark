@@ -1,57 +1,55 @@
 {
-  "name": "pdfkit-commonmark",
-  "version": "1.1.1",
-  "description": "A markdown renderer (using commonmark) for pdfkit.",
-  "main": "dist/commonmark-pdfkit-renderer.js",
-  "bin": "dist/cli.js",
-  "directories": {
-    "lib": "src/"
-  },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/maiers/pdfkit-commonmark.git"
-  },
-  "publishConfig": {
-    "registry": "https://registry.npmjs.org"
-  },
-  "scripts": {
-    "clean": "rm -rf dist/",
-    "build": "babel --out-dir dist/ src/",
-    "test": "mocha --require @babel/register --recursive test/",
-    "test:coverage": "nyc --reporter=html --reporter=text npm run test",
-    "lint": "eslint src/",
-    "lint:fix": "eslint --fix src/",
-    "prepublishOnly": "npm run clean && npm run build"
-  },
-  "keywords": [
-    "markdown",
-    "commonmark",
-    "pdf",
-    "pdfkit",
-    "render"
-  ],
-  "author": "Sebastian <sebastian@comci.de>",
-  "license": "MIT",
-  "peerDependencies": {
-    "commonmark": "^0.29.2",
-    "pdfkit": "^0.8.3"
-  },
-  "devDependencies": {
-    "@babel/cli": "^7.12.7",
-    "@babel/preset-env": "^7.12.7",
-    "@babel/register": "^7.12.1",
-    "babel-watch": "^7.0.0",
-    "chai": "^4.2.0",
-    "chai-fs": "^2.0.0",
-    "commonmark": "^0.29.2",
-    "eslint": "^7.14.0",
-    "eslint-plugin-async-await": "0.0.0",
-    "mocha": "^8.2.1",
-    "npm-run-all": "^4.1.5",
-    "nyc": "^15.1.0",
-    "pdfkit": "^0.11.0"
-  },
-  "dependencies": {
-    "deep-defaults": "^1.0.5"
-  }
+    "name": "pdfkit-commonmark",
+    "version": "1.1.1",
+    "description": "A markdown renderer (using commonmark) for pdfkit.",
+    "main": "dist/commonmark-pdfkit-renderer.js",
+    "bin": "dist/cli.js",
+    "directories": {
+        "lib": "src/"
+    },
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/maiers/pdfkit-commonmark.git"
+    },
+    "publishConfig": {
+        "registry": "https://registry.npmjs.org"
+    },
+    "scripts": {
+        "clean": "rm -rf dist/",
+        "build": "babel --out-dir dist/ src/",
+        "test": "mocha --require @babel/register --recursive test/",
+        "test:coverage": "nyc --reporter=html --reporter=text npm run test",
+        "lint": "eslint src/",
+        "lint:fix": "eslint --fix src/",
+        "prepublishOnly": "npm run clean && npm run build"
+    },
+    "keywords": [
+        "markdown",
+        "commonmark",
+        "pdf",
+        "pdfkit",
+        "render"
+    ],
+    "author": "Sebastian <sebastian@comci.de>",
+    "license": "MIT",
+    "peerDependencies": {
+        "commonmark": ">= 0.29.2 <= 0.29.3",
+        "pdfkit": " >= 0.8.3 <= 0.11.0"
+    },
+    "devDependencies": {
+        "@babel/cli": "^7.14.5",
+        "@babel/preset-env": "^7.14.7",
+        "@babel/register": "^7.14.5",
+        "babel-watch": "^7.4.1",
+        "chai": "^4.3.4",
+        "chai-fs": "^2.0.0",
+        "commonmark": "^0.29.3",
+        "eslint": "^7.29.0",
+        "eslint-plugin-async-await": "0.0.0",
+        "mocha": "^8.4.0",
+        "npm-run-all": "^4.1.5",
+        "nyc": "^15.1.0",
+        "pdfkit": "^0.11.0"
+    },
+    "dependencies": {}
 }

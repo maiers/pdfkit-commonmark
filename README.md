@@ -146,10 +146,6 @@ for the code examples._
 
 ## Dependencies
 
-There is currently only one regular dependency to "deep-defaults" 
-to enable deep default options. If anyone has a better solution
-for that, I am happy for a pointer.
-
 commonmark and pdfkit are marked as peerDependencies. Technically 
 you would not need either of them for this module to work 
 properly. But it would be pretty pointless to do so.
