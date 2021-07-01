@@ -9,5 +9,6 @@ export default {
         'heading-default': 'Helvetica',
         'code': 'Courier'
     },
-    fillColor: 'black'
+    fillColor: 'black',
+    softbreak: ' '
 };
