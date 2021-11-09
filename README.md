@@ -93,7 +93,7 @@ dolore te feugait nulla facilisi.
 
 ## Unsupported markdown features
 
-This renderer currently does __not__ (and likely never will) support:
+This renderer currently does __not__ support:
 
 - code
 - block quotes
@@ -101,7 +101,7 @@ This renderer currently does __not__ (and likely never will) support:
 - html
 - tables
 
-Pull requests are welcome.
+Pull requests to fill in these features are welcome.
 
 ## Usage
 
