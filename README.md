@@ -93,7 +93,7 @@ dolore te feugait nulla facilisi.
 
 ## Unsupported markdown features
 
-This renderer currently does __not__ (and likely never will) support:
+This renderer currently does __not__ support:
 
 - code
 - block quotes
@@ -101,7 +101,7 @@ This renderer currently does __not__ (and likely never will) support:
 - html
 - tables
 
-Pull requests are welcome.
+Pull requests to fill in these features are welcome.
 
 ## Usage
 
@@ -145,10 +145,6 @@ _Code will not be rendered in the PDF. Check the
 for the code examples._
 
 ## Dependencies
-
-There is currently only one regular dependency to "deep-defaults" 
-to enable deep default options. If anyone has a better solution
-for that, I am happy for a pointer.
 
 commonmark and pdfkit are marked as peerDependencies. Technically 
 you would not need either of them for this module to work 

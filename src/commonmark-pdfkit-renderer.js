@@ -1,4 +1,4 @@
-import deepDefaults from 'deep-defaults';
+import { deepDefaults } from './utils';
 import executeOperation from './logic/execute-operation';
 import * as Font from './logic/font';
 import defaultOptions from './default-options';
@@ -16,10 +16,8 @@ class CommonmarkPDFKitRenderer {
             throw new Error('options must be a plain object');
         }
 
-        // apply default options
-        deepDefaults(options, defaultOptions);
-
-        this.options = options;
+        // ensure default options
+        this.options = deepDefaults(options, defaultOptions);
 
     }
 
