@@ -43,7 +43,7 @@
         "babel-watch": "^7.4.1",
         "chai": "^4.3.4",
         "chai-fs": "^2.0.0",
-        "commonmark": "^0.29.3",
+        "commonmark": "^0.30.0",
         "eslint": "^7.29.0",
         "eslint-plugin-async-await": "0.0.0",
         "mocha": "^8.4.0",
