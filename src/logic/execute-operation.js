@@ -25,7 +25,7 @@ export default (operation, doc, options) => {
     if (operation.font) {
         let fontToUse = doc.font(Font.forInternalName(operation.font, options));
 
-        switch (options.font) {
+        switch (operation.font) {
             case 'default':
                 if (options?.customFont?.default) fontToUse = options.customFont.default
                 break;
