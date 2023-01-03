@@ -23,7 +23,7 @@ export default (operation, doc, options) => {
     }
 
     if (operation.font) {
-        let fontToUse = doc.font(Font.forInternalName(operation.font, options));
+        let fontToUse = Font.forInternalName(operation.font, options);
 
         switch (operation.font) {
             case 'default':
