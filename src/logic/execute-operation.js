@@ -23,7 +23,33 @@ export default (operation, doc, options) => {
     }
 
     if (operation.font) {
-        doc.font(Font.forInternalName(operation.font, options));
+        let fontToUse = doc.font(Font.forInternalName(operation.font, options));
+
+        switch (options.font) {
+            case 'default':
+                if (options?.customFont?.default) fontToUse = options.customFont.default
+                break;
+            case 'bold':
+                if (options?.customFont?.bold) fontToUse = options.customFont.bold
+                break;
+            case 'italic':
+                if (options?.customFont?.italic) fontToUse = options.customFont.italic
+                break;
+            case 'bold-italic':
+                if (options?.customFont?.boldItalic) fontToUse = options.customFont.boldItalic
+                break;
+            case 'heading-bold':
+                if (options?.customFont?.headingBold) fontToUse = options.customFont.headingBold
+                break;
+            case 'heading-default':
+                if (options?.customFont?.headingDefault) fontToUse = options.customFont.headingDefault
+                break;
+            case 'code':
+                if (options?.customFont?.code) fontToUse = options.customFont.code
+                break;
+        }
+
+        doc.font(fontToUse);
     }
 
     if (operation.fontSize) {
@@ -85,7 +111,7 @@ export default (operation, doc, options) => {
     }
 
     if (Object.prototype.hasOwnProperty.call(operation, 'text')) {
-        
+
         const textOptions = Object.assign({}, options.pdfkit, {
             continued: operation.continued,
             // requires false, to stop the link: https://github.com/devongovett/pdfkit/issues/464
@@ -106,7 +132,7 @@ export default (operation, doc, options) => {
         // the space on empty/missing text is required, as pdfkit
         // would otherwise ignore the command
         doc.text(operation.text || ' ', textOptions);
-        
+
     }
 
 };
