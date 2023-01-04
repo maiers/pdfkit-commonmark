@@ -5,11 +5,33 @@ import defaultOptions from './default-options';
 import * as List from './logic/list';
 
 /**
+ * @typedef {Object} Fonts
+ * @property {string} default
+ * @property {string} bold
+ * @property {string} italic
+ * @property {string} bold-italic
+ * @property {string} heading-bold
+ * @property {string} heading-default
+ * @property {string} code
+ */
+
+/**
+ * @typedef {Object} Options
+ * @property {number} [fontSize=12] Base font size
+ * @property {Fonts} [fonts] Set fonts used for specific markup
+ * @property {string} [fillColor] Text color
+ * @property {boolean} [debug]
+ */
+
+/**
  * An implementation of an renderer for commonmark. Using
  * pdfkit for rendering of the pdf.
  */
 class CommonmarkPDFKitRenderer {
 
+    /**
+     * @param {Options} [options]
+     */
     constructor(options = {}) {
 
         if (typeof options !== 'object' || Array.isArray(options)) {
