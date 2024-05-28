@@ -71,6 +71,9 @@ You can try CommonMark here. This dingus is powered by
 [commonmark.js](https://github.com/jgm/commonmark.js), the
 JavaScript reference implementation.
 
+## Inline Code
+
+Here follows some __inline__ code: \`const inline = 'code'\`, which ends here. 
 
 `);
         const writer = instance;
