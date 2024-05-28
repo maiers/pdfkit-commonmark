@@ -8,21 +8,9 @@ import {Parser} from 'commonmark';
 import CommonmarkPDFRenderer from '../src/commonmark-pdfkit-renderer';
 import * as TestUtils from './test-utils';
 
-
 chai.use(chaiFS);
 
-describe('final pdf render', function () {
-
-    let instance = new CommonmarkPDFRenderer({
-        debug: true
-    });
-    const reader = new Parser();
-
-    it('simple', function () {
-
-        const outputFilePath = path.join(TestUtils.outputFilePath(this));
-
-        const parsed = reader.parse(`
+const defaultMarkdown = `
 
 # Some simple formats (Level 1)
 
@@ -73,9 +61,30 @@ JavaScript reference implementation.
 
 ## Inline Code
 
-Here follows some __inline__ code: \`const inline = 'code'\`, which ends here. 
+Here follows some __inline__ code: \`const inline = 'code'\`, which ends here.
 
-`);
+## Block Code
+
+    const block = 'code';
+    if (block !== 'code') {
+      throw new Error('This is not code');
+    }
+
+`;
+
+describe('final pdf render', function () {
+
+    let instance = new CommonmarkPDFRenderer({
+        debug: true
+    });
+    const reader = new Parser();
+
+    it('simple', function () {
+
+        const outputFilePath = path.join(TestUtils.outputFilePath(this));
+
+
+        const parsed = reader.parse(defaultMarkdown);
         const writer = instance;
 
         const doc = new PDFDocument();
@@ -105,63 +114,13 @@ Here follows some __inline__ code: \`const inline = 'code'\`, which ends here.
                 'bold-italic': 'Helvetica-BoldOblique',
                 'heading-bold': 'Courier-Bold',
                 'heading-default': 'Courier',
-                'code': 'Times',
+                'code': 'Times-Roman',
             },
         });
 
         const outputFilePath = path.join(TestUtils.outputFilePath(this));
 
-        const parsed = reader.parse(`
-
-# Header
-
-This is __strong__. This is _emphasized_.
-
-This is ***strong and emphasized***.
-
-## Lists (Level 2)
-
-- List a
-- List b
-- List c
-
-### Links (Level 3)
-
-This is [a link](https://www.example.com) within some text. Or another emphasized *[link](#)*. This time we 
-format [only **a part** of the string as **strong**](#). 
-
-#### Heading 4
-
-## Try CommonMark
-
-You can try CommonMark here. This dingus is powered by
-[commonmark.js](https://github.com/jgm/commonmark.js), the
-JavaScript reference implementation.
-
-# Some simple formats (Level 1)
-
-This is __strong__. This is _emphasized_.
-
-This is ***strong and emphasized***.
-
-## Lists (Level 2)
-
-- List a
-- List b
-- List c
-
-### Links (Level 3)
-
-#### Heading 4
-
-## Try CommonMark
-
-You can try CommonMark here. This dingus is powered by
-[commonmark.js](https://github.com/jgm/commonmark.js), the
-JavaScript reference implementation.
-
-
-`);
+        const parsed = reader.parse(defaultMarkdown);
         const writer = instance;
 
         const doc = new PDFDocument();

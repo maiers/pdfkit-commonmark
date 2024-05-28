@@ -23,8 +23,115 @@ import * as List from './logic/list';
  * @property {boolean} [debug]
  */
 
+class PDFOperationPropertyStack {
+
+    constructor() {
+        this.stack = [];
+    }
+
+    /**
+     * Push instance to the stack
+     * @param instance
+     * @returns {PDFOperationPropertyStack} the stack instance
+     */
+    push(instance) {
+        this.stack.push(instance);
+        return this;
+    }
+
+    /**
+     * Remove the top-most item from the stack and return it.
+     * @returns {*} the top-most item of the stack
+     */
+    pop() {
+        return this.stack.pop();
+    }
+
+    /**
+     * Returns the top-most item of the stack, {@see #pop},
+     * without removing it from the stack.
+     *
+     * @returns {*} the top-most item of the stack
+     */
+    peek() {
+        if (this.stack.length === 0) return undefined;
+        return this.stack[this.stack.length - 1];
+    }
+
+    /**
+     * Returns the union of all stack items. Where
+     * properties from items higher up the stack will
+     * overwrite properties from items lower in the
+     * stack.
+     *
+     * @returns {*}
+     */
+    get(additional = {}) {
+        let stackUnion = this.stack.reduce((reduced, current) => {
+            return Object.assign(reduced, current);
+        }, {});
+        return Object.assign(stackUnion, additional);
+    }
+
+    /**
+     * Return the top-most object from the stack having
+     * set the requested property
+     *
+     * @param {string|Symbol} property to search for
+     * @returns {*} the top-most item on the stack having the requested property
+     */
+    find(property) {
+        for (let i = this.stack.length - 1; i >= 0; i--) {
+            const f = this.stack[i];
+            if (Object.prototype.hasOwnProperty.call(f, property)) {
+                return f;
+            }
+        }
+        return undefined;
+    }
+
+    /**
+     * Returns the property-value from the top-most item
+     * where the requested property is defined.
+     *
+     * {@see #find}
+     *
+     * @param {string|Symbol} property property to search for
+     * @returns {*} the property-value of the top-most item on the stack having the requested property
+     */
+    getValue(property) {
+        const frame = this.find(property);
+        if (frame) {
+            return frame[property];
+        }
+        return undefined;
+    }
+
+    /**
+     * Returns the incremented property value from the
+     * top-most item where the requested property is
+     * defined.
+     *
+     * @param property
+     * @param {number} [inc] defaults to 1
+     * @returns {number}
+     */
+    getIncValue(property, inc = 1) {
+        const frame = this.find(property);
+        if (frame) {
+            if (typeof frame[property] !== 'number') {
+                throw new Error(`property '${property}' must be a number`);
+            }
+            frame[property] += inc;
+            return frame[property];
+        }
+        return undefined;
+    }
+
+}
+
 /**
- * An implementation of an renderer for commonmark. Using
+ * An implementation of a renderer for commonmark. Using
  * pdfkit for rendering of the pdf.
  */
 class CommonmarkPDFKitRenderer {
@@ -60,113 +167,6 @@ class CommonmarkPDFKitRenderer {
 
         // array holding the extracted operations
         const operations = [];
-
-        class PDFOperationPropertyStack {
-
-            constructor() {
-                this.stack = [];
-            }
-
-            /**
-             * Push instance to the stack
-             * @param instance
-             * @returns {PDFOperationPropertyStack} the stack instance
-             */
-            push(instance) {
-                this.stack.push(instance);
-                return this;
-            }
-
-            /**
-             * Remove the top-most item from the stack and return it.
-             * @returns {*} the top-most item of the stack
-             */
-            pop() {
-                return this.stack.pop();
-            }
-
-            /**
-             * Returns the top-most item of the stack, {@see #pop},
-             * without removing it from the stack.
-             *
-             * @returns {*} the top-most item of the stack
-             */
-            peek() {
-                if (this.stack.length === 0) return undefined;
-                return this.stack[this.stack.length - 1];
-            }
-
-            /**
-             * Returns the union of all stack items. Where
-             * properties from items higher up the stack will
-             * overwrite properties from items lower in the
-             * stack.
-             *
-             * @returns {*}
-             */
-            get(additional = {}) {
-                let stackUnion = this.stack.reduce((reduced, current) => {
-                    return Object.assign(reduced, current);
-                }, {});
-                return Object.assign(stackUnion, additional);
-            }
-
-            /**
-             * Return the top-most object from the stack having
-             * set the requested property
-             *
-             * @param {string|Symbol} property to search for
-             * @returns {*} the top-most item on the stack having the requested property
-             */
-            find(property) {
-                for (let i = this.stack.length - 1; i >= 0; i--) {
-                    const f = this.stack[i];
-                    if (Object.prototype.hasOwnProperty.call(f, property)) {
-                        return f;
-                    }
-                }
-                return undefined;
-            }
-
-            /**
-             * Returns the property-value from the top-most item
-             * where the requested property is defined.
-             *
-             * {@see #find}
-             *
-             * @param {string|Symbol} property property to search for
-             * @returns {*} the property-value of the top-most item on the stack having the requested property
-             */
-            getValue(property) {
-                const frame = this.find(property);
-                if (frame) {
-                    return frame[property];
-                }
-                return undefined;
-            }
-
-            /**
-             * Returns the incremented property value from the
-             * top-most item where the requested property is
-             * defined.
-             *
-             * @param property
-             * @param {number} [inc] defaults to 1
-             * @returns {number}
-             */
-            getIncValue(property, inc = 1) {
-                const frame = this.find(property);
-                if (frame) {
-                    if (typeof frame[property] !== 'number') {
-                        throw new Error(`property '${property}' must be a number`);
-                    }
-                    frame[property] += inc;
-                    return frame[property];
-                }
-                return undefined;
-            }
-
-        }
 
         const stack = new PDFOperationPropertyStack();
 
@@ -247,7 +247,6 @@ class CommonmarkPDFKitRenderer {
                     }
                     break;
                 }
-
                 case 'softbreak': {
                     if (event.entering) {
                         const previousText = lastOperationWith('text');
@@ -451,8 +450,14 @@ class CommonmarkPDFKitRenderer {
                     break;
                 }
                 case 'code_block': {
-                    // unsupported
-                    // TODO
+                    if (event.entering) {
+                        operations.push(stack.get({
+                            font: Font.nameForCode(),
+                            fontSize: Font.sizeForCode(this.options),
+                            text: node.literal,
+                        }));
+                        moveDown();
+                    }
                     break;
                 }
                 case 'html_block': {
