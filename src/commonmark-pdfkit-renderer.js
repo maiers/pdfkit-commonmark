@@ -328,8 +328,18 @@ class CommonmarkPDFKitRenderer {
                     // unsupported
                     break;
                 case 'code':
-                    // unsupported
-                    // TODO
+                    if (event.entering) {
+                        operations.push(
+                            stack.get({
+                                text: node.literal,
+                                font: Font.nameForCode(),
+                                fontSize: Font.sizeForCode(this.options)
+                            })
+                        );
+                    } else {
+                        stack.pop();
+                        operations.push(stack.get());
+                    }
                     break;
                 case 'document':
                     // ignored
@@ -420,8 +430,8 @@ class CommonmarkPDFKitRenderer {
                         operations.push(
                             stack
                                 .push({
-                                    font: Font.forHeadingLevel(node.level),
-                                    fontSize: Font.sizeForHeadingLevel(node.level),
+                                    font: Font.nameForHeadingLevel(node.level),
+                                    fontSize: Font.sizeForHeadingLevel(node.level, this.options.fontSize),
                                     continued: true
                                 })
                                 .get()

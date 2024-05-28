@@ -1,4 +1,4 @@
-export const forHeadingLevel = (level) => {
+export const nameForHeadingLevel = (level) => {
     switch (level) {
         case 1:
             return 'heading-bold';
@@ -24,6 +24,17 @@ export const sizeForHeadingLevel = (level, baseSize = 12) => {
         default:
             return baseSize;
     }
+};
+
+export const nameForCode = () => 'code';
+
+export const sizeForCode = (options) => {
+    if (!options || !options.fonts) {
+        throw new Error('missing options.fonts');
+    }
+    // TODO: Adjusting the font-size requires adjusting the baseline to make sure
+    //  inline-code is aligned with the surrounding text.
+    return options.fontSize * 1;
 };
 
 /**
