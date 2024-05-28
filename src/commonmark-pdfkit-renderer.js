@@ -247,7 +247,6 @@ class CommonmarkPDFKitRenderer {
                     }
                     break;
                 }
-
                 case 'softbreak': {
                     if (event.entering) {
                         const previousText = lastOperationWith('text');
@@ -451,8 +450,14 @@ class CommonmarkPDFKitRenderer {
                     break;
                 }
                 case 'code_block': {
-                    // unsupported
-                    // TODO
+                    if (event.entering) {
+                        operations.push(stack.get({
+                            font: Font.nameForCode(),
+                            fontSize: Font.sizeForCode(this.options),
+                            text: node.literal,
+                        }));
+                        moveDown();
+                    }
                     break;
                 }
                 case 'html_block': {

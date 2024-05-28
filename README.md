@@ -95,7 +95,6 @@ dolore te feugait nulla facilisi.
 
 This renderer currently does __not__ support:
 
-- code
 - block quotes
 - images
 - html
@@ -108,10 +107,6 @@ Pull requests to fill in these features are welcome.
 ### CLI
 
     pdfkit-commonmark <inputFile> [<outputFile>]
-
-_Code will not be rendered in the PDF. Check the 
-[README.md](https://github.com/maiers/pdfkit-commonmark/blob/master/README.md) 
-for the code examples._
     
 ### Code
 
@@ -139,10 +134,6 @@ for the code examples._
     
     // end the document
     doc.end();
-    
-_Code will not be rendered in the PDF. Check the 
-[README.md](https://github.com/maiers/pdfkit-commonmark/blob/master/README.md) 
-for the code examples._
 
 ## Dependencies
 
