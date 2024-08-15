@@ -61,7 +61,6 @@ export default (operation, doc, options) => {
             const x = doc.x - List.arabicIndent(doc, operation.listItemCount);
             const y = doc.y;
             const index = operation.listItemIndex + 1;
-            console.log('_renderArabic', x, y, operation.listItemIndex, index);
             doc.text(`${index}.`, x, y, {continued: false});
             doc.moveUp();
             doc.x = oldX;
