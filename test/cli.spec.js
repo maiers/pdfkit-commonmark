@@ -1,8 +1,9 @@
-import {describe, it} from 'mocha';
-import fs from 'fs';
-import path from 'path';
-import chai, {expect} from 'chai';
-import chaiFS from 'chai-fs';
+const {describe, it} = require('mocha');
+const fs = require('fs');
+const path = require('path');
+const chai = require('chai');
+const {expect} = chai;
+const chaiFS = require('chai-fs');
 
 describe('test cli', () => {
 
