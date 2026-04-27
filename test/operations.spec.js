@@ -1,15 +1,16 @@
-import {expect} from 'chai';
+import { describe, it, beforeEach } from 'node:test';
+import assert from 'node:assert/strict';
 import { Parser } from 'commonmark';
-import CommonmarkPDFRenderer from '../src/commonmark-pdfkit-renderer';
+import CommonmarkPDFRenderer from '../src/commonmark-pdfkit-renderer.js';
 
 describe('intermediate "operations" format', () => {
 
     const instance = new CommonmarkPDFRenderer({debug: true});
     const reader = new Parser();
 
-    describe('special markdown', function () {
+    describe('special markdown', () => {
 
-        describe('escaped list character', function () {
+        describe('escaped list character', () => {
 
             const chars = [['\\-', '-'], ['\\*', '*']];
 
@@ -17,11 +18,11 @@ describe('intermediate "operations" format', () => {
 
                 const parsed = reader.parse(c[0]);
 
-                describe(c[0], function () {
+                describe(c[0], () => {
 
-                    it('returns a string', function () {
+                    it('returns a string', () => {
 
-                        expect(instance.operations(parsed)).to.deep.eql(
+                        assert.deepStrictEqual(instance.operations(parsed),
                             [
                                 {
                                     "continued": false,
@@ -48,7 +49,7 @@ describe('intermediate "operations" format', () => {
 
         });
 
-        describe('escaped heading character', function () {
+        describe('escaped heading character', () => {
 
             const chars = [['\\#', '#']];
 
@@ -56,11 +57,11 @@ describe('intermediate "operations" format', () => {
 
                 const parsed = reader.parse(c[0]);
 
-                describe(c[0], function () {
+                describe(c[0], () => {
 
-                    it('returns a string', function () {
+                    it('returns a string', () => {
 
-                        expect(instance.operations(parsed)).to.deep.eql(
+                        assert.deepStrictEqual(instance.operations(parsed),
                             [
                                 {
                                     "continued": false,
@@ -87,14 +88,14 @@ describe('intermediate "operations" format', () => {
 
         });
 
-        describe('forced line break', function () {
+        describe('forced line break', () => {
 
-            describe('with two trailing spaces', function () {
+            describe('with two trailing spaces', () => {
 
-                it('works', function () {
+                it('works', () => {
 
                     const parsed = reader.parse('This is a line  \nbreak with only one newline.');
-                    expect(instance.operations(parsed)).to.deep.eql(
+                    assert.deepStrictEqual(instance.operations(parsed),
                         [
                             {
                                 "continued": false,
@@ -125,12 +126,12 @@ describe('intermediate "operations" format', () => {
 
             });
 
-            describe('with one trailing space', function () {
+            describe('with one trailing space', () => {
 
-                it('does not work', function () {
+                it('does not work', () => {
 
                     const parsed = reader.parse('This is a line \nbreak that will be ignored.');
-                    expect(instance.operations(parsed)).to.deep.eql(
+                    assert.deepStrictEqual(instance.operations(parsed),
                         [
                             {
                                 "continued": true,
@@ -163,12 +164,12 @@ describe('intermediate "operations" format', () => {
 
         });
 
-        describe('escaped greater-than char (>)', function () {
+        describe('escaped greater-than char (>)', () => {
 
-            it('as only character', function () {
+            it('as only character', () => {
 
                 const parsed = reader.parse('\\>');
-                expect(instance.operations(parsed)).to.deep.eql(
+                assert.deepStrictEqual(instance.operations(parsed),
                     [
                         {
                             "continued": false,
@@ -199,7 +200,7 @@ describe('intermediate "operations" format', () => {
 
             const parsed = reader.parse('*emp*');
 
-            expect(instance.operations(parsed)).to.deep.eql(
+            assert.deepStrictEqual(instance.operations(parsed),
                 [
                     {
                         "fillColor": "black",
@@ -229,7 +230,7 @@ describe('intermediate "operations" format', () => {
 
             const parsed = reader.parse('_emp_');
 
-            expect(instance.operations(parsed)).to.deep.eql(
+            assert.deepStrictEqual(instance.operations(parsed),
                 [
                     {
                         "fillColor": "black",
@@ -259,7 +260,7 @@ describe('intermediate "operations" format', () => {
 
             const parsed = reader.parse('***strongemp***');
 
-            expect(instance.operations(parsed)).to.deep.eql(
+            assert.deepStrictEqual(instance.operations(parsed),
                 [
                     {
                         "fillColor": "black",
@@ -295,7 +296,7 @@ describe('intermediate "operations" format', () => {
 
             const parsed = reader.parse('This is *emphasized* followed by another __strong__ word.');
 
-            expect(instance.operations(parsed)).to.deep.eql(
+            assert.deepStrictEqual(instance.operations(parsed),
                 [
                     {
                         "continued": true,
@@ -352,7 +353,7 @@ describe('intermediate "operations" format', () => {
 
             const parsed = reader.parse('**strong**');
 
-            expect(instance.operations(parsed)).to.deep.eql(
+            assert.deepStrictEqual(instance.operations(parsed),
                 [
                     {
                         "fillColor": "black",
@@ -382,7 +383,7 @@ describe('intermediate "operations" format', () => {
 
             const parsed = reader.parse('__strong__');
 
-            expect(instance.operations(parsed)).to.deep.eql(
+            assert.deepStrictEqual(instance.operations(parsed),
                 [
                     {
                         "fillColor": "black",
@@ -416,7 +417,7 @@ describe('intermediate "operations" format', () => {
 
             const parsed = reader.parse('[text](link)');
 
-            expect(instance.operations(parsed)).to.deep.eql(
+            assert.deepStrictEqual(instance.operations(parsed),
                 [
                     {
                         "fillColor": "blue",
@@ -448,7 +449,7 @@ describe('intermediate "operations" format', () => {
 
             const parsed = reader.parse('A [link](href) within some text.');
 
-            expect(instance.operations(parsed)).to.deep.eql(
+            assert.deepStrictEqual(instance.operations(parsed),
                 [
                     {
                         "continued": true,
@@ -489,7 +490,7 @@ describe('intermediate "operations" format', () => {
 
             const parsed = reader.parse('This is [a link](https://www.example.com) within some text.');
 
-            expect(instance.operations(parsed)).to.deep.eql(
+            assert.deepStrictEqual(instance.operations(parsed),
                 [
                     {
                         "continued": true,
@@ -530,7 +531,7 @@ describe('intermediate "operations" format', () => {
 
             const parsed = reader.parse('*[text](link)*');
 
-            expect(instance.operations(parsed)).to.deep.eql(
+            assert.deepStrictEqual(instance.operations(parsed),
                 [
                     {
                         "fillColor": "black",
@@ -568,7 +569,7 @@ describe('intermediate "operations" format', () => {
 
             const parsed = reader.parse('[text with some *of it* emphasized](link)');
 
-            expect(instance.operations(parsed)).to.deep.eql(
+            assert.deepStrictEqual(instance.operations(parsed),
                 [
                     {
                         "fillColor": "blue",
@@ -622,7 +623,7 @@ describe('intermediate "operations" format', () => {
 
             const parsed = reader.parse('This is the part with a missing whitespace\nat the end.');
 
-            expect(instance.operations(parsed)).to.deep.eql(
+            assert.deepStrictEqual(instance.operations(parsed),
                 [
                     {
                         "continued": true,
@@ -655,7 +656,7 @@ describe('intermediate "operations" format', () => {
 
             const parsed = reader.parse('This is the part with a missing whitespace\n*at* the end.');
 
-            expect(instance.operations(parsed)).to.deep.eql(
+            assert.deepStrictEqual(instance.operations(parsed),
                 [
                     {
                         "continued": true,
@@ -698,7 +699,7 @@ describe('intermediate "operations" format', () => {
 
             const parsed = reader.parse('This is the part with the *emphasize*\nfollowed with a missing whitespace.');
 
-            expect(instance.operations(parsed)).to.deep.eql(
+            assert.deepStrictEqual(instance.operations(parsed),
                 [
                     {
                         "continued": true,
@@ -741,7 +742,7 @@ describe('intermediate "operations" format', () => {
 
             const parsed = reader.parse('This is the part with the [linkText](linkHref)\nfollowed with a missing whitespace.');
 
-            expect(instance.operations(parsed)).to.deep.eql(
+            assert.deepStrictEqual(instance.operations(parsed),
                 [
                     {
                         "continued": true,
@@ -786,7 +787,7 @@ describe('intermediate "operations" format', () => {
 
             const parsed = reader.parse('This is the part with the [linkText](linkHref) \nfollowed with a missing whitespace.');
 
-            expect(instance.operations(parsed)).to.deep.eql(
+            assert.deepStrictEqual(instance.operations(parsed),
                 [
                     {
                         "continued": true,
@@ -842,7 +843,7 @@ describe('intermediate "operations" format', () => {
 
             const parsed = reader.parse('Line one.\n\nLine two.');
 
-            expect(instance.operations(parsed)).to.deep.eql(
+            assert.deepStrictEqual(instance.operations(parsed),
                 [
                     {
                         "continued": false,
@@ -874,17 +875,17 @@ describe('intermediate "operations" format', () => {
 
     describe('list', () => {
 
-        describe('only one "-"', function () {
+        describe('only one "-"', () => {
 
             let parsed;
 
-            beforeEach(function () {
+            beforeEach(() => {
                 parsed = reader.parse('-');
             });
 
-            it('returns an empty list', function () {
+            it('returns an empty list', () => {
 
-                expect(instance.operations(parsed)).to.deep.eql(
+                assert.deepStrictEqual(instance.operations(parsed),
                     [
                         {
                             "fillColor": "black",
@@ -922,7 +923,7 @@ describe('intermediate "operations" format', () => {
 
             const parsed = reader.parse('- Item 1\n- Item 2');
 
-            expect(instance.operations(parsed)).to.deep.eql(
+            assert.deepStrictEqual(instance.operations(parsed),
                 [
                     {
                         "fillColor": "black",
@@ -969,11 +970,11 @@ describe('intermediate "operations" format', () => {
 
         describe('nested', () => {
 
-            it('both unordered', function () {
+            it('both unordered', () => {
 
                 const parsed = reader.parse('- List 1, Item 1\n   - List 2, Item 1\n   - List 2, Item 2\n- List 1, Item 2');
 
-                expect(instance.operations(parsed)).to.deep.eql(
+                assert.deepStrictEqual(instance.operations(parsed),
                     [
                         {
                             "fillColor": "black",
@@ -1046,11 +1047,11 @@ describe('intermediate "operations" format', () => {
 
             });
 
-            it('inner ordered, outer unordered', function () {
+            it('inner ordered, outer unordered', () => {
 
                 const parsed = reader.parse('- List 1, Item 1\n   1. List 2, Item 1\n   2. List 2, Item 2\n- List 1, Item 2');
 
-                expect(instance.operations(parsed)).to.deep.eql(
+                assert.deepStrictEqual(instance.operations(parsed),
                     [
                         {
                             "fillColor": "black",
@@ -1123,11 +1124,11 @@ describe('intermediate "operations" format', () => {
 
             });
 
-            it('outer ordered, inner unordered', function () {
+            it('outer ordered, inner unordered', () => {
 
                 const parsed = reader.parse('1. List 1, Item 1\n   - List 2, Item 1\n   - List 2, Item 2\n2. List 1, Item 2');
 
-                expect(instance.operations(parsed)).to.deep.eql(
+                assert.deepStrictEqual(instance.operations(parsed),
                     [
                         {
                             "fillColor": "black",
@@ -1200,11 +1201,11 @@ describe('intermediate "operations" format', () => {
 
             });
 
-            it('both ordered', function () {
+            it('both ordered', () => {
 
                 const parsed = reader.parse('1. List 1, Item 1\n   1. List 2, Item 1\n   2. List 2, Item 2\n2. List 1, Item 2');
 
-                expect(instance.operations(parsed)).to.deep.eql(
+                assert.deepStrictEqual(instance.operations(parsed),
                     [
                         {
                             "fillColor": "black",
@@ -1287,7 +1288,7 @@ describe('intermediate "operations" format', () => {
 
             const parsed = reader.parse('# Headline');
 
-            expect(instance.operations(parsed)).to.deep.eql(
+            assert.deepStrictEqual(instance.operations(parsed),
                 [
                     {
                         "fillColor": "black",
@@ -1318,7 +1319,7 @@ describe('intermediate "operations" format', () => {
 
             const parsed = reader.parse('## Headline');
 
-            expect(instance.operations(parsed)).to.deep.eql(
+            assert.deepStrictEqual(instance.operations(parsed),
                 [
                     {
                         "fillColor": "black",
@@ -1349,7 +1350,7 @@ describe('intermediate "operations" format', () => {
 
             const parsed = reader.parse('### Headline');
 
-            expect(instance.operations(parsed)).to.deep.eql(
+            assert.deepStrictEqual(instance.operations(parsed),
                 [
                     {
                         "fillColor": "black",
@@ -1380,7 +1381,7 @@ describe('intermediate "operations" format', () => {
 
             const parsed = reader.parse('#### Headline');
 
-            expect(instance.operations(parsed)).to.deep.eql(
+            assert.deepStrictEqual(instance.operations(parsed),
                 [
                     {
                         "fillColor": "black",

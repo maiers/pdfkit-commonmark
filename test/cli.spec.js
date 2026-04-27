@@ -1,20 +1,25 @@
-const {describe, it} = require('mocha');
-const fs = require('fs');
-const path = require('path');
-const chai = require('chai');
-const {expect} = chai;
-const chaiFS = require('chai-fs');
+import { describe, it } from 'node:test';
+import assert from 'node:assert/strict';
+import fs from 'node:fs';
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
+import { execSync } from 'node:child_process';
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+const projectRoot = path.join(__dirname, '..');
 
 describe('test cli', () => {
 
     it('with README.md', () => {
 
-        const inputFilePath = path.join(__dirname, '../README.md');
-        const outputFilePath = path.join(__dirname, '../README.pdf');
+        const inputFilePath = path.join(projectRoot, 'README.md');
+        const outputFilePath = path.join(projectRoot, 'README.pdf');
 
-        process.argv = [null, null, inputFilePath, outputFilePath];
+        execSync(`node dist/cjs/cli.js ${inputFilePath} ${outputFilePath}`, {
+            cwd: projectRoot
+        });
 
-        require('../src/cli');
+        assert.ok(fs.existsSync(outputFilePath));
 
     });
 

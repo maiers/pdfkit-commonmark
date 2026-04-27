@@ -1,5 +1,5 @@
-import * as Font from './font';
-import * as List from './list';
+import * as Font from './font.js';
+import * as List from './list.js';
 
 /**
  * Execute the given operation on the given document.

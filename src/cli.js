@@ -4,11 +4,11 @@ import fs from 'fs';
 import path from 'path';
 import PDFDocument from 'pdfkit';
 import { Parser } from 'commonmark';
-import CommonmarkPDFRenderer from './commonmark-pdfkit-renderer';
+import CommonmarkPDFRenderer from './commonmark-pdfkit-renderer.js';
 
 // get input file info
 const inputFilePath = process.argv[2];
-const absInputFilePath = path.resolve(__dirname, inputFilePath);
+const absInputFilePath = path.resolve(process.cwd(), inputFilePath);
 
 // check input file exists
 if (!fs.existsSync(absInputFilePath)) {
@@ -19,7 +19,7 @@ if (!fs.existsSync(absInputFilePath)) {
 // get/define output file info
 const baseName = path.basename(inputFilePath);
 const outputFilePath = process.argv[3] || `${baseName}.pdf`;
-const absOutputFilePath = path.resolve(__dirname, outputFilePath);
+const absOutputFilePath = path.resolve(process.cwd(), outputFilePath);
 
 let fileContents, parsed;
 

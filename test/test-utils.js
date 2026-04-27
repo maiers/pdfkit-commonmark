@@ -1,18 +1,8 @@
-import path from 'path';
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
 
-export const recursiveTestTitle = (ctx, tail = '') => {
-    if (ctx) {
-        return recursiveTestTitle(ctx.parent, ctx.title + ' ' + tail);
-    }
-    return tail;
-};
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
-export const outputFilePath = (ctx) => {
-
-    if (ctx.test) {
-        return path.join(__dirname, `${recursiveTestTitle(ctx.test).replace(/[^a-z]+/ig, '_')}.pdf`);
-    }
-
-    return path.join(__dirname, `${recursiveTestTitle(ctx).replace(/[^a-z]+/ig, '_')}.pdf`);
-
+export const outputFilePath = (name) => {
+    return path.join(__dirname, `_${name.replace(/[^a-z0-9]+/ig, '_')}.pdf`);
 };

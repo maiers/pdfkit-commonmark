@@ -1,5 +1,6 @@
-import { expect } from 'chai';
-import { deepDefaults } from '../src/utils';
+import { describe, it } from 'node:test';
+import assert from 'node:assert/strict';
+import { deepDefaults } from '../src/utils.js';
 
 describe('deepDefaults', () => {
 
@@ -81,17 +82,17 @@ describe('deepDefaults', () => {
     TEST_CASES.forEach(t => {
         const [ inputObj, inputDefault, expectedOutput ] = t;
         it(`${JSON.stringify(inputObj)} with defaults ${JSON.stringify(inputDefault)} should return ${JSON.stringify(expectedOutput)}`, () => {
-            expect(deepDefaults(inputObj, inputDefault)).to.deep.eql(expectedOutput);
+            assert.deepStrictEqual(deepDefaults(inputObj, inputDefault), expectedOutput);
         });
     });
 
     it('clones any default object', () => {
         const defaults = { key: true };
         const output = deepDefaults({}, defaults);
-        expect(output).to.deep.equal({ key: true });
+        assert.deepStrictEqual(output, { key: true });
         output.key = false;
-        expect(output).to.deep.equal({ key: false });
-        expect(defaults).to.deep.equal({ key: true });
+        assert.deepStrictEqual(output, { key: false });
+        assert.deepStrictEqual(defaults, { key: true });
     });
 
     it('clones any nested default object', () => {
@@ -101,19 +102,19 @@ describe('deepDefaults', () => {
             },
         };
         const output = deepDefaults({}, defaults);
-        expect(output).to.deep.equal({ key0: { key1: true } });
+        assert.deepStrictEqual(output, { key0: { key1: true } });
         output.key0.key1 = false;
-        expect(output).to.deep.equal({ key0: { key1: false } });
-        expect(defaults).to.deep.equal({ key0: { key1: true } });
+        assert.deepStrictEqual(output, { key0: { key1: false } });
+        assert.deepStrictEqual(defaults, { key0: { key1: true } });
     });
 
     it('clones any default array', () => {
         const defaults = [ 1, 2, 3 ];
         const output = deepDefaults([], defaults);
-        expect(output).to.deep.equal([ 1, 2, 3 ]);
+        assert.deepStrictEqual(output, [ 1, 2, 3 ]);
         output.push(4);
-        expect(output).to.deep.equal([ 1, 2, 3, 4 ]);
-        expect(defaults).to.deep.equal([ 1, 2, 3 ]);
+        assert.deepStrictEqual(output, [ 1, 2, 3, 4 ]);
+        assert.deepStrictEqual(defaults, [ 1, 2, 3 ]);
     });
 
 });

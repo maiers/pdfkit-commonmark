@@ -2,8 +2,17 @@
     "name": "pdfkit-commonmark",
     "version": "1.2.1",
     "description": "A markdown renderer (using commonmark) for pdfkit.",
-    "main": "dist/commonmark-pdfkit-renderer.js",
-    "bin": "dist/cli.js",
+    "type": "module",
+    "main": "dist/cjs/commonmark-pdfkit-renderer.js",
+    "module": "dist/esm/commonmark-pdfkit-renderer.js",
+    "exports": {
+        ".": {
+            "import": "./dist/esm/commonmark-pdfkit-renderer.js",
+            "require": "./dist/cjs/commonmark-pdfkit-renderer.js",
+            "default": "./dist/cjs/commonmark-pdfkit-renderer.js"
+        }
+    },
+    "bin": "dist/cjs/cli.js",
     "directories": {
         "lib": "src/"
     },
@@ -16,12 +25,14 @@
     },
     "scripts": {
         "clean": "rm -rf dist/",
-        "build": "babel --out-dir dist/ src/",
-        "test": "mocha --require @babel/register --recursive test/",
-        "test:coverage": "nyc --reporter=html --reporter=text npm run test",
+        "build:cjs": "babel --out-dir dist/cjs/ src/ && echo '{\"type\":\"commonjs\"}' > dist/cjs/package.json",
+        "build:esm": "cp -r src/ dist/esm/",
+        "build": "npm run clean && npm run build:cjs && npm run build:esm",
+        "test": "node --test --test-concurrency=1 test/*.spec.js",
+        "test:coverage": "c8 --reporter=html --reporter=text node --test --test-concurrency=1 test/*.spec.js",
         "lint": "eslint src/",
         "lint:fix": "eslint --fix src/",
-        "prepublishOnly": "npm run clean && npm run build"
+        "prepublishOnly": "npm run build"
     },
     "keywords": [
         "markdown",
@@ -39,16 +50,10 @@
     "devDependencies": {
         "@babel/cli": "^7.18.6",
         "@babel/preset-env": "^7.18.6",
-        "@babel/register": "^7.18.6",
-        "babel-watch": "^7.7.0",
-        "chai": "^4.3.6",
-        "chai-fs": "^2.0.0",
+        "c8": "^11.0.0",
         "commonmark": "^0.31.2",
         "eslint": "^8.18.0",
         "eslint-plugin-async-await": "0.0.0",
-        "mocha": "^10.0.0",
-        "npm-run-all": "^4.1.5",
-        "nyc": "^15.1.0",
         "pdfkit": "^0.18.0"
     }
 }

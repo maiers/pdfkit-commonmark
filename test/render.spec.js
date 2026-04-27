@@ -1,14 +1,13 @@
-import {describe, it} from 'mocha';
-import fs from 'fs';
-import path from 'path';
-import chai, {expect} from 'chai';
-import chaiFS from 'chai-fs';
+import { describe, it } from 'node:test';
+import assert from 'node:assert/strict';
+import fs from 'node:fs';
+import { fileURLToPath } from 'node:url';
 import PDFDocument from 'pdfkit';
-import {Parser} from 'commonmark';
-import CommonmarkPDFRenderer from '../src/commonmark-pdfkit-renderer';
-import * as TestUtils from './test-utils';
+import { Parser } from 'commonmark';
+import CommonmarkPDFRenderer from '../src/commonmark-pdfkit-renderer.js';
+import * as TestUtils from './test-utils.js';
 
-chai.use(chaiFS);
+const __filename = fileURLToPath(import.meta.url);
 
 const defaultMarkdown = `
 
@@ -26,8 +25,8 @@ This is ***strong and emphasized***.
 
 ### Links (Level 3)
 
-This is [a link](https://www.example.com) within some text. Or another emphasized *[link](#)*. This time we 
-format [only **a part** of the string as **strong**](#). 
+This is [a link](https://www.example.com) within some text. Or another emphasized *[link](#)*. This time we
+format [only **a part** of the string as **strong**](#).
 
 #### Heading 4
 
@@ -72,39 +71,37 @@ Here follows some __inline__ code: \`const inline = 'code'\`, which ends here.
 
 `;
 
-describe('final pdf render', function () {
+describe('final pdf render', () => {
 
     let instance = new CommonmarkPDFRenderer({
         debug: true
     });
     const reader = new Parser();
 
-    it('simple', function () {
+    it('simple', () => {
 
-        const outputFilePath = path.join(TestUtils.outputFilePath(this));
-
+        const outPath = TestUtils.outputFilePath('final pdf render simple');
 
         const parsed = reader.parse(defaultMarkdown);
         const writer = instance;
 
         const doc = new PDFDocument();
 
-        doc.pipe(fs.createWriteStream(outputFilePath));
+        doc.pipe(fs.createWriteStream(outPath));
 
-        // add name of the test file
         doc.text(`Location on disc: ${__filename}`).moveDown(2);
 
         writer.render(doc, parsed);
 
         doc.end();
 
-        console.log('written to', outputFilePath);
+        console.log('written to', outPath);
 
-        expect(outputFilePath).to.be.a.file();
+        assert.ok(fs.existsSync(outPath));
 
     });
 
-    it('use other fonts', function () {
+    it('use other fonts', () => {
 
         instance = new CommonmarkPDFRenderer({
             fonts: {
@@ -118,31 +115,30 @@ describe('final pdf render', function () {
             },
         });
 
-        const outputFilePath = path.join(TestUtils.outputFilePath(this));
+        const outPath = TestUtils.outputFilePath('final pdf render use other fonts');
 
         const parsed = reader.parse(defaultMarkdown);
         const writer = instance;
 
         const doc = new PDFDocument();
 
-        doc.pipe(fs.createWriteStream(outputFilePath));
+        doc.pipe(fs.createWriteStream(outPath));
 
-        // add name of the test file
         doc.text(`Location on disc: ${__filename}`).moveDown(2);
 
         writer.render(doc, parsed);
 
         doc.end();
 
-        console.log('written to', outputFilePath);
+        console.log('written to', outPath);
 
-        expect(outputFilePath).to.be.a.file();
+        assert.ok(fs.existsSync(outPath));
 
     });
 
-    it('formated list', function () {
+    it('formated list', () => {
 
-        const outputFilePath = path.join(TestUtils.outputFilePath(this));
+        const outPath = TestUtils.outputFilePath('final pdf render formated list');
 
         const parsed = reader.parse(`
 
@@ -197,38 +193,37 @@ describe('final pdf render', function () {
 
         const doc = new PDFDocument();
 
-        doc.pipe(fs.createWriteStream(outputFilePath));
+        doc.pipe(fs.createWriteStream(outPath));
 
-        // add name of the test file
         doc.text(`Location on disc: ${__filename}`).moveDown(2);
 
         writer.render(doc, parsed);
 
         doc.end();
 
-        console.log('written to', outputFilePath);
+        console.log('written to', outPath);
 
-        expect(outputFilePath).to.be.a.file();
+        assert.ok(fs.existsSync(outPath));
 
     });
 
-    it('nested list', function () {
+    it('nested list', () => {
 
-        const outputFilePath = path.join(TestUtils.outputFilePath(this));
+        const outPath = TestUtils.outputFilePath('final pdf render nested list');
 
         const parsed = reader.parse(`
 
 # Two nested unordered lists
 
-- List 1, Item 1  
+- List 1, Item 1
 - List 1, Item 2
-   - List 2, Item 1  
+   - List 2, Item 1
    - List 2, Item 2
 - List 1, Item 3
 
 # Two nested ordered lists
 
-1. List 1, Item 1  
+1. List 1, Item 1
 2. List 1, Item 2
    1. List 2, Item 1
    2. List 2, Item 2
@@ -239,51 +234,50 @@ describe('final pdf render', function () {
 
         const doc = new PDFDocument();
 
-        doc.pipe(fs.createWriteStream(outputFilePath));
+        doc.pipe(fs.createWriteStream(outPath));
 
-        // add name of the test file
         doc.text(`Location on disc: ${__filename}`).moveDown(2);
 
         writer.render(doc, parsed);
 
         doc.end();
 
-        console.log('written to', outputFilePath);
+        console.log('written to', outPath);
 
-        expect(outputFilePath).to.be.a.file();
+        assert.ok(fs.existsSync(outPath));
 
     });
 
-    it('nested multiline list', function () {
+    it('nested multiline list', () => {
 
-        const outputFilePath = path.join(TestUtils.outputFilePath(this));
+        const outPath = TestUtils.outputFilePath('final pdf render nested multiline list');
 
         const parsed = reader.parse(`
 
 # Two nested unordered lists with linebreaks
 
-- List 1, Item 1  
+- List 1, Item 1
   Multiline_1-1
-- List 1, Item 2  
+- List 1, Item 2
   Multiline_1-2
-   - List 2, Item 1  
+   - List 2, Item 1
   Multiline_2-1
-   - List 2, Item 2  
+   - List 2, Item 2
   Multiline_2-2
-- List 1, Item 3  
+- List 1, Item 3
   Multiline_1-3
 
 # Two nested ordered lists
 
-1. List 1, Item 1  
+1. List 1, Item 1
   **Multiline_1-1**
-2. List 1, Item 2  
+2. List 1, Item 2
   Multiline_1-2
-   1. List 2, Item 1  
+   1. List 2, Item 1
   Multiline_2-1
-   2. List 2, Item 2  
+   2. List 2, Item 2
   Multiline_2-2
-3. List 1, Item 3  
+3. List 1, Item 3
   Multiline_1-3
 
 `);
@@ -291,24 +285,23 @@ describe('final pdf render', function () {
 
         const doc = new PDFDocument();
 
-        doc.pipe(fs.createWriteStream(outputFilePath));
+        doc.pipe(fs.createWriteStream(outPath));
 
-        // add name of the test file
         doc.text(`Location on disc: ${__filename}`).moveDown(2);
 
         writer.render(doc, parsed);
 
         doc.end();
 
-        console.log('written to', outputFilePath);
+        console.log('written to', outPath);
 
-        expect(outputFilePath).to.be.a.file();
+        assert.ok(fs.existsSync(outPath));
 
     });
 
-    it('limited width', function () {
+    it('limited width', () => {
 
-        const outputFilePath = path.join(TestUtils.outputFilePath(this));
+        const outPath = TestUtils.outputFilePath('final pdf render limited width');
 
         const parsed = reader.parse(`
 
@@ -318,10 +311,10 @@ This is __strong__. This is _emphasized_.
 
 This is ***strong and emphasized***.
 
-This is a forced  
-linebreak. While 
-the following linebreaks 
-will not be visible 
+This is a forced
+linebreak. While
+the following linebreaks
+will not be visible
 later.
 
 `);
@@ -329,10 +322,9 @@ later.
 
         const doc = new PDFDocument();
 
-        doc.pipe(fs.createWriteStream(outputFilePath));
+        doc.pipe(fs.createWriteStream(outPath));
 
-        // add name of the test file
-        doc.text(`Location on disc: ${outputFilePath}`).moveDown(2);
+        doc.text(`Location on disc: ${outPath}`).moveDown(2);
 
         const calculatedDimensions = writer.dimensionsOfMarkdown(doc, parsed, {
             width: 200
@@ -354,72 +346,68 @@ later.
 
         doc.end();
 
-        console.log('written to', outputFilePath);
+        console.log('written to', outPath);
 
-        expect(outputFilePath).to.be.a.file();
-        expect(renderedDimensions.x).to.be.greaterThan(0);
+        assert.ok(fs.existsSync(outPath));
+        assert.ok(renderedDimensions.x > 0);
 
-        expect(calculatedDimensions.h).to.be.closeTo(renderedDimensions.h, .001);
+        assert.ok(Math.abs(calculatedDimensions.h - renderedDimensions.h) <= .001);
 
         console.log('Dimensions', renderedDimensions);
 
     });
 
-    describe('forced linebreaks', function () {
-
+    describe('forced linebreaks', () => {
 
         const parsed = reader.parse(`
 
-Multiple **strong**  
-forced  
-[linebreaks](https://www.example.com)  
-over  
-six  
+Multiple **strong**
+forced
+[linebreaks](https://www.example.com)
+over
+six
 lines.
 
 `);
         const writer = instance;
 
-        it('full width', function () {
+        it('full width', () => {
 
-            const outputFilePath = TestUtils.outputFilePath(this);
+            const outPath = TestUtils.outputFilePath('final pdf render forced linebreaks full width');
 
             const doc = new PDFDocument();
 
-            doc.pipe(fs.createWriteStream(outputFilePath));
+            doc.pipe(fs.createWriteStream(outPath));
 
-            // add name of the test file
-            doc.text(`Location on disc: ${outputFilePath}`).moveDown(2);
+            doc.text(`Location on disc: ${outPath}`).moveDown(2);
 
             writer.render(doc, parsed);
             doc.end();
 
-            console.log('written to', outputFilePath);
-            expect(outputFilePath).to.be.a.file();
+            console.log('written to', outPath);
+            assert.ok(fs.existsSync(outPath));
 
         });
 
-        it('limited width', function () {
+        it('limited width', () => {
 
-            const outputFilePath = TestUtils.outputFilePath(this);
+            const outPath = TestUtils.outputFilePath('final pdf render forced linebreaks limited width');
 
             const doc = new PDFDocument();
 
-            doc.pipe(fs.createWriteStream(outputFilePath));
+            doc.pipe(fs.createWriteStream(outPath));
 
-            // add name of the test file
-            doc.text(`Location on disc: ${outputFilePath}`).moveDown(2);
+            doc.text(`Location on disc: ${outPath}`).moveDown(2);
 
             writer.render(doc, parsed, {
                 width: 200
             });
             doc.end();
 
-            console.log('written to', outputFilePath);
-            expect(outputFilePath).to.be.a.file();
+            console.log('written to', outPath);
+            assert.ok(fs.existsSync(outPath));
 
         });
-
 
     });
 

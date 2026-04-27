@@ -1,8 +1,8 @@
-import { deepDefaults } from './utils';
-import executeOperation from './logic/execute-operation';
-import * as Font from './logic/font';
-import defaultOptions from './default-options';
-import * as List from './logic/list';
+import { deepDefaults } from './utils.js';
+import executeOperation from './logic/execute-operation.js';
+import * as Font from './logic/font.js';
+import defaultOptions from './default-options.js';
+import * as List from './logic/list.js';
 
 /**
  * @typedef {Object} Fonts
