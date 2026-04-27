@@ -1,6 +1,6 @@
 {
     "name": "pdfkit-commonmark",
-    "version": "1.2.1",
+    "version": "1.3.0",
     "description": "A markdown renderer (using commonmark) for pdfkit.",
     "type": "module",
     "main": "dist/cjs/commonmark-pdfkit-renderer.js",
