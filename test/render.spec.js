@@ -6,8 +6,17 @@ import PDFDocument from 'pdfkit';
 import { Parser } from 'commonmark';
 import CommonmarkPDFRenderer from '../src/commonmark-pdfkit-renderer.js';
 import * as TestUtils from './test-utils.js';
+import { comparePdf } from './visual-compare.js';
 
 const __filename = fileURLToPath(import.meta.url);
+
+function createDoc(outPath) {
+    const doc = new PDFDocument();
+    const stream = fs.createWriteStream(outPath);
+    doc.pipe(stream);
+    const finished = new Promise((resolve) => stream.on('finish', resolve));
+    return { doc, finished };
+}
 
 const defaultMarkdown = `
 
@@ -78,30 +87,25 @@ describe('final pdf render', () => {
     });
     const reader = new Parser();
 
-    it('simple', () => {
+    it('simple', async () => {
 
-        const outPath = TestUtils.outputFilePath('final pdf render simple');
-
+        const name = 'final pdf render simple';
+        const outPath = TestUtils.outputFilePath(name);
         const parsed = reader.parse(defaultMarkdown);
-        const writer = instance;
 
-        const doc = new PDFDocument();
-
-        doc.pipe(fs.createWriteStream(outPath));
-
+        const { doc, finished } = createDoc(outPath);
         doc.text(`Location on disc: ${__filename}`).moveDown(2);
-
-        writer.render(doc, parsed);
-
+        instance.render(doc, parsed);
         doc.end();
 
-        console.log('written to', outPath);
+        await finished;
 
-        assert.ok(fs.existsSync(outPath));
+        const result = comparePdf(outPath, name);
+        assert.ok(result.pass, `Visual regression: ${name} differs from baseline`);
 
     });
 
-    it('use other fonts', () => {
+    it('use other fonts', async () => {
 
         instance = new CommonmarkPDFRenderer({
             fonts: {
@@ -115,30 +119,26 @@ describe('final pdf render', () => {
             },
         });
 
-        const outPath = TestUtils.outputFilePath('final pdf render use other fonts');
-
+        const name = 'final pdf render use other fonts';
+        const outPath = TestUtils.outputFilePath(name);
         const parsed = reader.parse(defaultMarkdown);
-        const writer = instance;
 
-        const doc = new PDFDocument();
-
-        doc.pipe(fs.createWriteStream(outPath));
-
+        const { doc, finished } = createDoc(outPath);
         doc.text(`Location on disc: ${__filename}`).moveDown(2);
-
-        writer.render(doc, parsed);
-
+        instance.render(doc, parsed);
         doc.end();
 
-        console.log('written to', outPath);
+        await finished;
 
-        assert.ok(fs.existsSync(outPath));
+        const result = comparePdf(outPath, name);
+        assert.ok(result.pass, `Visual regression: ${name} differs from baseline`);
 
     });
 
-    it('formated list', () => {
+    it('formated list', async () => {
 
-        const outPath = TestUtils.outputFilePath('final pdf render formated list');
+        const name = 'final pdf render formated list';
+        const outPath = TestUtils.outputFilePath(name);
 
         const parsed = reader.parse(`
 
@@ -189,27 +189,23 @@ describe('final pdf render', () => {
 
 
 `);
-        const writer = instance;
 
-        const doc = new PDFDocument();
-
-        doc.pipe(fs.createWriteStream(outPath));
-
+        const { doc, finished } = createDoc(outPath);
         doc.text(`Location on disc: ${__filename}`).moveDown(2);
-
-        writer.render(doc, parsed);
-
+        instance.render(doc, parsed);
         doc.end();
 
-        console.log('written to', outPath);
+        await finished;
 
-        assert.ok(fs.existsSync(outPath));
+        const result = comparePdf(outPath, name);
+        assert.ok(result.pass, `Visual regression: ${name} differs from baseline`);
 
     });
 
-    it('nested list', () => {
+    it('nested list', async () => {
 
-        const outPath = TestUtils.outputFilePath('final pdf render nested list');
+        const name = 'final pdf render nested list';
+        const outPath = TestUtils.outputFilePath(name);
 
         const parsed = reader.parse(`
 
@@ -230,27 +226,23 @@ describe('final pdf render', () => {
 3. List 1, Item 3
 
 `);
-        const writer = instance;
 
-        const doc = new PDFDocument();
-
-        doc.pipe(fs.createWriteStream(outPath));
-
+        const { doc, finished } = createDoc(outPath);
         doc.text(`Location on disc: ${__filename}`).moveDown(2);
-
-        writer.render(doc, parsed);
-
+        instance.render(doc, parsed);
         doc.end();
 
-        console.log('written to', outPath);
+        await finished;
 
-        assert.ok(fs.existsSync(outPath));
+        const result = comparePdf(outPath, name);
+        assert.ok(result.pass, `Visual regression: ${name} differs from baseline`);
 
     });
 
-    it('nested multiline list', () => {
+    it('nested multiline list', async () => {
 
-        const outPath = TestUtils.outputFilePath('final pdf render nested multiline list');
+        const name = 'final pdf render nested multiline list';
+        const outPath = TestUtils.outputFilePath(name);
 
         const parsed = reader.parse(`
 
@@ -281,27 +273,23 @@ describe('final pdf render', () => {
   Multiline_1-3
 
 `);
-        const writer = instance;
 
-        const doc = new PDFDocument();
-
-        doc.pipe(fs.createWriteStream(outPath));
-
+        const { doc, finished } = createDoc(outPath);
         doc.text(`Location on disc: ${__filename}`).moveDown(2);
-
-        writer.render(doc, parsed);
-
+        instance.render(doc, parsed);
         doc.end();
 
-        console.log('written to', outPath);
+        await finished;
 
-        assert.ok(fs.existsSync(outPath));
+        const result = comparePdf(outPath, name);
+        assert.ok(result.pass, `Visual regression: ${name} differs from baseline`);
 
     });
 
-    it('limited width', () => {
+    it('limited width', async () => {
 
-        const outPath = TestUtils.outputFilePath('final pdf render limited width');
+        const name = 'final pdf render limited width';
+        const outPath = TestUtils.outputFilePath(name);
 
         const parsed = reader.parse(`
 
@@ -318,15 +306,11 @@ will not be visible
 later.
 
 `);
-        const writer = instance;
 
-        const doc = new PDFDocument();
-
-        doc.pipe(fs.createWriteStream(outPath));
-
+        const { doc, finished } = createDoc(outPath);
         doc.text(`Location on disc: ${outPath}`).moveDown(2);
 
-        const calculatedDimensions = writer.dimensionsOfMarkdown(doc, parsed, {
+        const calculatedDimensions = instance.dimensionsOfMarkdown(doc, parsed, {
             width: 200
         });
 
@@ -335,7 +319,7 @@ later.
             .fill('lightgreen')
             .restore();
 
-        const renderedDimensions = writer.render(doc, parsed, {
+        const renderedDimensions = instance.render(doc, parsed, {
             width: 200
         });
 
@@ -346,14 +330,13 @@ later.
 
         doc.end();
 
-        console.log('written to', outPath);
+        await finished;
 
-        assert.ok(fs.existsSync(outPath));
         assert.ok(renderedDimensions.x > 0);
-
         assert.ok(Math.abs(calculatedDimensions.h - renderedDimensions.h) <= .001);
 
-        console.log('Dimensions', renderedDimensions);
+        const result = comparePdf(outPath, name);
+        assert.ok(result.pass, `Visual regression: ${name} differs from baseline`);
 
     });
 
@@ -371,41 +354,39 @@ lines.
 `);
         const writer = instance;
 
-        it('full width', () => {
+        it('full width', async () => {
 
-            const outPath = TestUtils.outputFilePath('final pdf render forced linebreaks full width');
+            const name = 'final pdf render forced linebreaks full width';
+            const outPath = TestUtils.outputFilePath(name);
 
-            const doc = new PDFDocument();
-
-            doc.pipe(fs.createWriteStream(outPath));
-
+            const { doc, finished } = createDoc(outPath);
             doc.text(`Location on disc: ${outPath}`).moveDown(2);
-
             writer.render(doc, parsed);
             doc.end();
 
-            console.log('written to', outPath);
-            assert.ok(fs.existsSync(outPath));
+            await finished;
+
+            const result = comparePdf(outPath, name);
+            assert.ok(result.pass, `Visual regression: ${name} differs from baseline`);
 
         });
 
-        it('limited width', () => {
+        it('limited width', async () => {
 
-            const outPath = TestUtils.outputFilePath('final pdf render forced linebreaks limited width');
+            const name = 'final pdf render forced linebreaks limited width';
+            const outPath = TestUtils.outputFilePath(name);
 
-            const doc = new PDFDocument();
-
-            doc.pipe(fs.createWriteStream(outPath));
-
+            const { doc, finished } = createDoc(outPath);
             doc.text(`Location on disc: ${outPath}`).moveDown(2);
-
             writer.render(doc, parsed, {
                 width: 200
             });
             doc.end();
 
-            console.log('written to', outPath);
-            assert.ok(fs.existsSync(outPath));
+            await finished;
+
+            const result = comparePdf(outPath, name);
+            assert.ok(result.pass, `Visual regression: ${name} differs from baseline`);
 
         });
 

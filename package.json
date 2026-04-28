@@ -54,6 +54,8 @@
         "commonmark": "^0.31.2",
         "eslint": "^8.18.0",
         "eslint-plugin-async-await": "0.0.0",
-        "pdfkit": "^0.18.0"
+        "mupdf": "^1.27.0",
+        "pdfkit": "^0.18.0",
+        "pixelmatch": "^7.1.0"
     }
 }

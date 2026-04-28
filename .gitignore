@@ -5,3 +5,5 @@
 /dist/
 /.nyc_output/
 /coverage/
+/test/diffs/
+/test/*.pdf

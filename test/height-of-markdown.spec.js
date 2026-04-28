@@ -5,6 +5,15 @@ import PDFDocument from 'pdfkit';
 import { Parser } from 'commonmark';
 import CommonmarkPDFRenderer from '../src/commonmark-pdfkit-renderer.js';
 import * as TestUtils from './test-utils.js';
+import { comparePdf } from './visual-compare.js';
+
+function createDoc(outPath) {
+    const doc = new PDFDocument();
+    const stream = fs.createWriteStream(outPath);
+    doc.pipe(stream);
+    const finished = new Promise((resolve) => stream.on('finish', resolve));
+    return { doc, finished };
+}
 
 describe('dimensionsOfMarkdown', () => {
 
@@ -18,11 +27,11 @@ describe('dimensionsOfMarkdown', () => {
 
         describe('with default (page) width', () => {
 
-            it('is equal to the rendered height', () => {
+            it('is equal to the rendered height', async () => {
 
-                const doc = new PDFDocument();
-
-                doc.pipe(fs.createWriteStream(TestUtils.outputFilePath('dimensionsOfMarkdown for a single paragraph markdown with default page width')));
+                const name = 'dimensionsOfMarkdown single paragraph default width';
+                const outPath = TestUtils.outputFilePath(name);
+                const { doc, finished } = createDoc(outPath);
 
                 const calculatedDimensions = writer.dimensionsOfMarkdown(doc, parsed, {});
 
@@ -39,14 +48,19 @@ describe('dimensionsOfMarkdown', () => {
                     .restore();
 
                 doc.end();
+                await finished;
 
                 assert.ok(Math.abs(calculatedDimensions.h - renderedDimensions.h) <= .001);
+
+                const result = comparePdf(outPath, name);
+                assert.ok(result.pass, `Visual regression: ${name} differs from baseline`);
             });
 
-            it('returns same height from heightOfMarkdown', () => {
+            it('returns same height from heightOfMarkdown', async () => {
 
-                const doc = new PDFDocument();
-                doc.pipe(fs.createWriteStream(TestUtils.outputFilePath('dimensionsOfMarkdown for a single paragraph markdown heightOfMarkdown')));
+                const name = 'dimensionsOfMarkdown single paragraph heightOfMarkdown';
+                const outPath = TestUtils.outputFilePath(name);
+                const { doc, finished } = createDoc(outPath);
 
                 const calculatedDimensions = writer.dimensionsOfMarkdown(doc, parsed, {});
 
@@ -60,20 +74,23 @@ describe('dimensionsOfMarkdown', () => {
                 const height = writer.heightOfMarkdown(doc, parsed, {});
 
                 doc.end();
+                await finished;
 
                 assert.ok(Math.abs(height - calculatedDimensions.h) <= .001);
+
+                const result = comparePdf(outPath, name);
+                assert.ok(result.pass, `Visual regression: ${name} differs from baseline`);
             });
 
         });
 
         describe('with limited width', () => {
 
-            it('is equal to the rendered height', () => {
+            it('is equal to the rendered height', async () => {
 
-                const doc = new PDFDocument();
-
-                const outPath = TestUtils.outputFilePath('dimensionsOfMarkdown for a single paragraph markdown with limited width');
-                doc.pipe(fs.createWriteStream(outPath));
+                const name = 'dimensionsOfMarkdown single paragraph limited width';
+                const outPath = TestUtils.outputFilePath(name);
+                const { doc, finished } = createDoc(outPath);
 
                 const pdfkitOptions = {width: 80};
 
@@ -93,9 +110,13 @@ describe('dimensionsOfMarkdown', () => {
                     .restore();
 
                 doc.end();
+                await finished;
 
                 // TODO: Improve precision of this text
                 assert.strictEqual(Math.round(calculatedDimensions.h), Math.round(renderedDimensions.h));
+
+                const result = comparePdf(outPath, name);
+                assert.ok(result.pass, `Visual regression: ${name} differs from baseline`);
             });
 
         });
@@ -107,11 +128,11 @@ describe('dimensionsOfMarkdown', () => {
         const markdown = 'This is *emphasized*.\n\nAnd another **strong** paragraph.';
         const parsed = reader.parse(markdown);
 
-        it('is equal to the rendered height', () => {
+        it('is equal to the rendered height', async () => {
 
-            const doc = new PDFDocument();
-
-            doc.pipe(fs.createWriteStream(TestUtils.outputFilePath('dimensionsOfMarkdown for two paragraphs')));
+            const name = 'dimensionsOfMarkdown two paragraphs';
+            const outPath = TestUtils.outputFilePath(name);
+            const { doc, finished } = createDoc(outPath);
 
             const calculatedDimensions = writer.dimensionsOfMarkdown(doc, parsed, {});
 
@@ -128,8 +149,12 @@ describe('dimensionsOfMarkdown', () => {
                 .restore();
 
             doc.end();
+            await finished;
 
             assert.ok(Math.abs(calculatedDimensions.h - renderedDimensions.h) <= .001);
+
+            const result = comparePdf(outPath, name);
+            assert.ok(result.pass, `Visual regression: ${name} differs from baseline`);
 
         });
 
@@ -140,11 +165,11 @@ describe('dimensionsOfMarkdown', () => {
         const markdown = 'This is *emphasized*.  \nAnd another  \n**strong** paragraph.';
         const parsed = reader.parse(markdown);
 
-        it('is equal to the rendered height', () => {
+        it('is equal to the rendered height', async () => {
 
-            const doc = new PDFDocument();
-
-            doc.pipe(fs.createWriteStream(TestUtils.outputFilePath('dimensionsOfMarkdown for linebreaks')));
+            const name = 'dimensionsOfMarkdown linebreaks';
+            const outPath = TestUtils.outputFilePath(name);
+            const { doc, finished } = createDoc(outPath);
 
             const calculatedDimensions = writer.dimensionsOfMarkdown(doc, parsed, {});
 
@@ -161,8 +186,12 @@ describe('dimensionsOfMarkdown', () => {
                 .restore();
 
             doc.end();
+            await finished;
 
             assert.ok(Math.abs(calculatedDimensions.h - renderedDimensions.h) <= .001);
+
+            const result = comparePdf(outPath, name);
+            assert.ok(result.pass, `Visual regression: ${name} differs from baseline`);
 
         });
 
@@ -173,11 +202,11 @@ describe('dimensionsOfMarkdown', () => {
         const markdown = 'This is an introduction sentence:\n\n- And one\n- Two\n- Three list items';
         const parsed = reader.parse(markdown);
 
-        it('is equal to the rendered height', () => {
+        it('is equal to the rendered height', async () => {
 
-            const doc = new PDFDocument();
-
-            doc.pipe(fs.createWriteStream(TestUtils.outputFilePath('dimensionsOfMarkdown for lists')));
+            const name = 'dimensionsOfMarkdown lists';
+            const outPath = TestUtils.outputFilePath(name);
+            const { doc, finished } = createDoc(outPath);
 
             const calculatedDimensions = writer.dimensionsOfMarkdown(doc, parsed, {});
 
@@ -194,16 +223,20 @@ describe('dimensionsOfMarkdown', () => {
                 .restore();
 
             doc.end();
+            await finished;
 
             assert.ok(Math.abs(calculatedDimensions.h - renderedDimensions.h) <= .001);
 
+            const result = comparePdf(outPath, name);
+            assert.ok(result.pass, `Visual regression: ${name} differs from baseline`);
+
         });
 
-        it('is equal to the rendered height for a very narrow list', () => {
+        it('is equal to the rendered height for a very narrow list', async () => {
 
-            const doc = new PDFDocument();
-
-            doc.pipe(fs.createWriteStream(TestUtils.outputFilePath('dimensionsOfMarkdown for lists narrow')));
+            const name = 'dimensionsOfMarkdown lists narrow';
+            const outPath = TestUtils.outputFilePath(name);
+            const { doc, finished } = createDoc(outPath);
 
             const calculatedDimensions = writer.dimensionsOfMarkdown(doc, parsed, {width: 50});
 
@@ -220,8 +253,12 @@ describe('dimensionsOfMarkdown', () => {
                 .restore();
 
             doc.end();
+            await finished;
 
             assert.ok(Math.abs(calculatedDimensions.h - renderedDimensions.h) <= .001);
+
+            const result = comparePdf(outPath, name);
+            assert.ok(result.pass, `Visual regression: ${name} differs from baseline`);
 
         });
 
