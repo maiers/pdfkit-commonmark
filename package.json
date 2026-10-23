@@ -27,7 +27,7 @@
         "clean": "rm -rf dist/",
         "build:cjs": "babel --out-dir dist/cjs/ src/ && echo '{\"type\":\"commonjs\"}' > dist/cjs/package.json",
         "build:esm": "cp -r src/ dist/esm/",
-        "build": "npm run clean && npm run build:cjs && npm run build:esm",
+        "build": "yarn clean && yarn build:cjs && yarn build:esm",
         "test": "node --test --test-concurrency=1 test/*.spec.js",
         "test:coverage": "c8 --reporter=html --reporter=text node --test --test-concurrency=1 test/*.spec.js",
         "lint": "eslint src/",
@@ -49,6 +49,7 @@
     },
     "devDependencies": {
         "@babel/cli": "^7.18.6",
+        "@babel/core": "^7",
         "@babel/preset-env": "^7.18.6",
         "c8": "^11.0.0",
         "commonmark": "^0.31.2",

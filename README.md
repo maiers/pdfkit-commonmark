@@ -29,6 +29,10 @@ following command after installing npm.
 
     npm install --save pdfkit-commonmark
 
+or, with yarn:
+
+    yarn add pdfkit-commonmark
+
 ## Supported markdown features
 
 ### Paragraphs
